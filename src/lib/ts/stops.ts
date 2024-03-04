@@ -1,0 +1,387 @@
+export interface StopInfo {
+  stop_id: number;
+  stop_code: number;
+  stop_name: StopEnum;
+  stop_desc: string;
+  stop_lat: number;
+  stop_lon: number;
+  stop_url: string;
+  location_type: number;
+  stop_timezone: string;
+  wheelchair_boarding: number;
+  platform_code: string;
+}
+
+export enum StopEnum {
+  ONE_WESTERN_AVE = '1 Western Ave',
+  MEMORIAL_DRIVE = '784 Memorial Drive',
+  BARRYS_CORNER_NORTHBOUND = 'Barry\'s Corner (Northbound)',
+  BARRYS_CORNER_SOUTHBOUND = 'Barry\'s Corner (Southbound)',
+  CAMBRIDGE_COMMON = 'Cambridge Common',
+  HARVARD_SQUARE_NORTHBOUND = 'Harvard Square (Northbound)',
+  HARVARD_SQUARE_SOUTHBOUND = 'Harvard Square (Southbound)',
+  KENNEDY_SCHOOL_NORTHBOUND = 'Kennedy School (Northbound)',
+  KENNEDY_SCHOOL_SOUTHBOUND = 'Kennedy School (Southbound)',
+  LAMONT_LIBRARY = 'Lamont Library',
+  LAW_SCHOOL = 'Law School (WCC)',
+  LEVERETT_HOUSE = 'Leverett House',
+  MASS_AND_GARDEN = 'Mass and Garden',
+  MATHER_HOUSE = 'Mather House',
+  MAXWELL_DWORKIN = 'Maxwell Dworkin',
+  MEMORIAL_HALL = 'Memorial Hall',
+  QUAD = 'Quad',
+  RADCLIFFE_YARD = 'Radcliffe Yard',
+  SCIENCE_CENTER = 'Science Center',
+  SEC = 'SEC',
+  SEVER_GATE = 'Sever Gate',
+  STADIUM_NORTHBOUND = 'Stadium (Northbound)',
+  STADIUM_SOUTHBOUND = 'Stadium (Southbound)',
+  THE_INN = 'The Inn',
+  WIDENER_GATE = 'Widener Gate',
+  WINTHROP_HOUSE = 'Winthrop House',
+};
+
+const rawData: StopInfo[] = [
+  {
+    "stop_id": 5036,
+    "stop_code": 5036,
+    "stop_name": StopEnum.ONE_WESTERN_AVE,
+    "stop_desc": "",
+    "stop_lat": 42.364114,
+    "stop_lon": -71.119075,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 58381,
+    "stop_code": 58381,
+    "stop_name": StopEnum.MEMORIAL_DRIVE,
+    "stop_desc": "",
+    "stop_lat": 42.359703,
+    "stop_lon": -71.114945,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 63189,
+    "stop_code": 63189,
+    "stop_name": StopEnum.BARRYS_CORNER_NORTHBOUND,
+    "stop_desc": "",
+    "stop_lat": 42.363958424,
+    "stop_lon": -71.127741708,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 63190,
+    "stop_code": 63190,
+    "stop_name": StopEnum.BARRYS_CORNER_SOUTHBOUND,
+    "stop_desc": "",
+    "stop_lat": 42.363936034,
+    "stop_lon": -71.127861727,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 132600,
+    "stop_code": 132600,
+    "stop_name": StopEnum.CAMBRIDGE_COMMON,
+    "stop_desc": "",
+    "stop_lat": 42.376994673,
+    "stop_lon": -71.122417866,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 5041,
+    "stop_code": 5041,
+    "stop_name": StopEnum.HARVARD_SQUARE_NORTHBOUND,
+    "stop_desc": "",
+    "stop_lat": 42.372722,
+    "stop_lon": -71.119965,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 58344,
+    "stop_code": 58344,
+    "stop_name": StopEnum.HARVARD_SQUARE_SOUTHBOUND,
+    "stop_desc": "",
+    "stop_lat": 42.373378883,
+    "stop_lon": -71.119734232,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 5040,
+    "stop_code": 5040,
+    "stop_name": StopEnum.KENNEDY_SCHOOL_NORTHBOUND,
+    "stop_desc": "",
+    "stop_lat": 42.371524,
+    "stop_lon": -71.120985,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 5054,
+    "stop_code": 5054,
+    "stop_name": StopEnum.KENNEDY_SCHOOL_SOUTHBOUND,
+    "stop_desc": "",
+    "stop_lat": 42.371203,
+    "stop_lon": -71.121339,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 5045,
+    "stop_code": 5045,
+    "stop_name": StopEnum.LAMONT_LIBRARY,
+    "stop_desc": "",
+    "stop_lat": 42.37288,
+    "stop_lon": -71.115008,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 5042,
+    "stop_code": 5042,
+    "stop_name": StopEnum.LAW_SCHOOL,
+    "stop_desc": "",
+    "stop_lat": 42.377977084,
+    "stop_lon": -71.119937392,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 6854,
+    "stop_code": 6854,
+    "stop_name": StopEnum.LEVERETT_HOUSE,
+    "stop_desc": "",
+    "stop_lat": 42.370083645,
+    "stop_lon": -71.116713434,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 5050,
+    "stop_code": 5050,
+    "stop_name": StopEnum.MASS_AND_GARDEN,
+    "stop_desc": "",
+    "stop_lat": 42.375187466,
+    "stop_lon": -71.119467061,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 5046,
+    "stop_code": 5046,
+    "stop_name": StopEnum.MATHER_HOUSE,
+    "stop_desc": "",
+    "stop_lat": 42.368758709,
+    "stop_lon": -71.115333438,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 5043,
+    "stop_code": 5043,
+    "stop_name": StopEnum.MAXWELL_DWORKIN,
+    "stop_desc": "",
+    "stop_lat": 42.378933,
+    "stop_lon": -71.11663,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 5044,
+    "stop_code": 5044,
+    "stop_name": StopEnum.MEMORIAL_HALL,
+    "stop_desc": "",
+    "stop_lat": 42.37645186,
+    "stop_lon": -71.114392997,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 5049,
+    "stop_code": 5049,
+    "stop_name": StopEnum.QUAD,
+    "stop_desc": "",
+    "stop_lat": 42.381867,
+    "stop_lon": -71.125325,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 23509,
+    "stop_code": 23509,
+    "stop_name": StopEnum.RADCLIFFE_YARD,
+    "stop_desc": "",
+    "stop_lat": 42.3765,
+    "stop_lon": -71.12212,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 6248,
+    "stop_code": 6248,
+    "stop_name": StopEnum.SCIENCE_CENTER,
+    "stop_desc": "",
+    "stop_lat": 42.376901687,
+    "stop_lon": -71.115974486,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 58343,
+    "stop_code": 58343,
+    "stop_name": StopEnum.SEC,
+    "stop_desc": "",
+    "stop_lat": 42.363328644,
+    "stop_lon": -71.125392617,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 154627,
+    "stop_code": 154627,
+    "stop_name": StopEnum.SEVER_GATE,
+    "stop_desc": "",
+    "stop_lat": 42.374634042,
+    "stop_lon": -71.114510008,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 5039,
+    "stop_code": 5039,
+    "stop_name": StopEnum.STADIUM_NORTHBOUND,
+    "stop_desc": "",
+    "stop_lat": 42.367121429,
+    "stop_lon": -71.124887448,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 23930,
+    "stop_code": 23930,
+    "stop_name": StopEnum.STADIUM_SOUTHBOUND,
+    "stop_desc": "",
+    "stop_lat": 42.367024629,
+    "stop_lon": -71.125015193,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 5047,
+    "stop_code": 5047,
+    "stop_name": StopEnum.THE_INN,
+    "stop_desc": "",
+    "stop_lat": 42.372127,
+    "stop_lon": -71.115427,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 5048,
+    "stop_code": 5048,
+    "stop_name": StopEnum.WIDENER_GATE,
+    "stop_desc": "",
+    "stop_lat": 42.372843815,
+    "stop_lon": -71.116972399,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  },
+  {
+    "stop_id": 5051,
+    "stop_code": 5051,
+    "stop_name": StopEnum.WINTHROP_HOUSE,
+    "stop_desc": "",
+    "stop_lat": 42.371468397,
+    "stop_lon": -71.117267311,
+    "stop_url": "",
+    "location_type": 0,
+    "stop_timezone": "",
+    "wheelchair_boarding": 0,
+    "platform_code": ""
+  }
+];
+
+export const getStopByEnum = (stop: StopEnum): StopInfo => {
+  return rawData.find((s) => s.stop_name === stop) as StopInfo;
+}
