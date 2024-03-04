@@ -1,7 +1,6 @@
 <script lang="ts">
   import { StopEnum, getStopByEnum } from '$lib/ts/stops';
-  import BusDetail from './BusDetail.svelte';
-
+  import BusDetail from './RouteEntry.svelte';
 </script>
 
 <div class="container">
