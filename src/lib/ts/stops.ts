@@ -41,8 +41,8 @@ export enum StopEnum {
   WINTHROP_HOUSE = 'Winthrop House',
 };
 
-const rawData: StopInfo[] = [
-  {
+export const stopInfo: Record<StopEnum, StopInfo> = {
+  [StopEnum.ONE_WESTERN_AVE]: {
     "stop_id": 5036,
     "stop_code": 5036,
     "stop_name": StopEnum.ONE_WESTERN_AVE,
@@ -55,7 +55,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.MEMORIAL_DRIVE]: {
     "stop_id": 58381,
     "stop_code": 58381,
     "stop_name": StopEnum.MEMORIAL_DRIVE,
@@ -68,7 +68,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.BARRYS_CORNER_NORTHBOUND]: {
     "stop_id": 63189,
     "stop_code": 63189,
     "stop_name": StopEnum.BARRYS_CORNER_NORTHBOUND,
@@ -81,7 +81,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.BARRYS_CORNER_SOUTHBOUND]: {
     "stop_id": 63190,
     "stop_code": 63190,
     "stop_name": StopEnum.BARRYS_CORNER_SOUTHBOUND,
@@ -94,7 +94,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.CAMBRIDGE_COMMON]: {
     "stop_id": 132600,
     "stop_code": 132600,
     "stop_name": StopEnum.CAMBRIDGE_COMMON,
@@ -107,7 +107,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.HARVARD_SQUARE_NORTHBOUND]: {
     "stop_id": 5041,
     "stop_code": 5041,
     "stop_name": StopEnum.HARVARD_SQUARE_NORTHBOUND,
@@ -120,7 +120,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.HARVARD_SQUARE_SOUTHBOUND]: {
     "stop_id": 58344,
     "stop_code": 58344,
     "stop_name": StopEnum.HARVARD_SQUARE_SOUTHBOUND,
@@ -133,7 +133,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.KENNEDY_SCHOOL_NORTHBOUND]: {
     "stop_id": 5040,
     "stop_code": 5040,
     "stop_name": StopEnum.KENNEDY_SCHOOL_NORTHBOUND,
@@ -146,7 +146,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.KENNEDY_SCHOOL_SOUTHBOUND]: {
     "stop_id": 5054,
     "stop_code": 5054,
     "stop_name": StopEnum.KENNEDY_SCHOOL_SOUTHBOUND,
@@ -159,7 +159,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.LAMONT_LIBRARY]: {
     "stop_id": 5045,
     "stop_code": 5045,
     "stop_name": StopEnum.LAMONT_LIBRARY,
@@ -172,7 +172,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.LAW_SCHOOL]: {
     "stop_id": 5042,
     "stop_code": 5042,
     "stop_name": StopEnum.LAW_SCHOOL,
@@ -185,7 +185,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.LEVERETT_HOUSE]: {
     "stop_id": 6854,
     "stop_code": 6854,
     "stop_name": StopEnum.LEVERETT_HOUSE,
@@ -198,7 +198,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.MASS_AND_GARDEN]: {
     "stop_id": 5050,
     "stop_code": 5050,
     "stop_name": StopEnum.MASS_AND_GARDEN,
@@ -211,7 +211,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.MATHER_HOUSE]: {
     "stop_id": 5046,
     "stop_code": 5046,
     "stop_name": StopEnum.MATHER_HOUSE,
@@ -224,7 +224,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.MAXWELL_DWORKIN]: {
     "stop_id": 5043,
     "stop_code": 5043,
     "stop_name": StopEnum.MAXWELL_DWORKIN,
@@ -237,7 +237,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.MEMORIAL_HALL]: {
     "stop_id": 5044,
     "stop_code": 5044,
     "stop_name": StopEnum.MEMORIAL_HALL,
@@ -250,7 +250,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.QUAD]: {
     "stop_id": 5049,
     "stop_code": 5049,
     "stop_name": StopEnum.QUAD,
@@ -263,7 +263,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.RADCLIFFE_YARD]: {
     "stop_id": 23509,
     "stop_code": 23509,
     "stop_name": StopEnum.RADCLIFFE_YARD,
@@ -276,7 +276,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.SCIENCE_CENTER]: {
     "stop_id": 6248,
     "stop_code": 6248,
     "stop_name": StopEnum.SCIENCE_CENTER,
@@ -289,7 +289,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.SEC]: {
     "stop_id": 58343,
     "stop_code": 58343,
     "stop_name": StopEnum.SEC,
@@ -302,7 +302,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.SEVER_GATE]: {
     "stop_id": 154627,
     "stop_code": 154627,
     "stop_name": StopEnum.SEVER_GATE,
@@ -315,7 +315,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.STADIUM_NORTHBOUND]: {
     "stop_id": 5039,
     "stop_code": 5039,
     "stop_name": StopEnum.STADIUM_NORTHBOUND,
@@ -328,7 +328,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.STADIUM_SOUTHBOUND]: {
     "stop_id": 23930,
     "stop_code": 23930,
     "stop_name": StopEnum.STADIUM_SOUTHBOUND,
@@ -341,7 +341,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.THE_INN]: {
     "stop_id": 5047,
     "stop_code": 5047,
     "stop_name": StopEnum.THE_INN,
@@ -354,7 +354,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.WIDENER_GATE]: {
     "stop_id": 5048,
     "stop_code": 5048,
     "stop_name": StopEnum.WIDENER_GATE,
@@ -367,7 +367,7 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   },
-  {
+  [StopEnum.WINTHROP_HOUSE]: {
     "stop_id": 5051,
     "stop_code": 5051,
     "stop_name": StopEnum.WINTHROP_HOUSE,
@@ -380,8 +380,4 @@ const rawData: StopInfo[] = [
     "wheelchair_boarding": 0,
     "platform_code": ""
   }
-];
-
-export const getStopByEnum = (stop: StopEnum): StopInfo => {
-  return rawData.find((s) => s.stop_name === stop) as StopInfo;
-}
+};
