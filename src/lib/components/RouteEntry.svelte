@@ -9,10 +9,10 @@
 	<!-- Horizontal Route Line -->
 	<div class="route"></div>
 	{#each stops as stop}
-		<div class="stop" style="left: {stop.position * 360 - 5}px;"></div>
+		<div class="stop" style="left: calc({100 * stop.position}%);"></div>
 	{/each}
 
-	<div class="bus-icon" style="left: {busLocation * 360 - 12}px;">🚌</div>
+	<div class="bus-icon" style="left: calc({100 * busLocation}%);">🚌</div>
 </div>
 
 <style>
@@ -25,10 +25,9 @@
 
 	.route {
 		position: relative;
-		width: 90%;
+		width: 100%;
 		height: 2px;
 		background-color: black;
-		margin-top: 50px;
 	}
 
 	.stop {

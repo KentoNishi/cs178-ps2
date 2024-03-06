@@ -3,7 +3,7 @@
 	import BusDetail from './RouteEntry.svelte';
 </script>
 
-<div>
+<div class="container">
 	<BusDetail
 		stops={[
 			{
@@ -37,3 +37,15 @@
 		]}
 	/>
 </div>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    --container-width: 80%;
+    width: var(--container-width);
+    margin-left: calc((100% - var(--container-width)) / 2);
+    margin-top: 50px;
+  }
+</style>
