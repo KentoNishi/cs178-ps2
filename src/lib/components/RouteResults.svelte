@@ -43,7 +43,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    --container-width: 80%;
+    --container-width: calc(100% - 20px);
     width: var(--container-width);
     margin-left: calc((100% - var(--container-width)) / 2);
     margin-top: 50px;
