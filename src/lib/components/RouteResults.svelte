@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { StopEnum, stopInfo } from '$lib/ts/stops';
-	import BusDetail from './RouteEntry.svelte';
+	import RouteEntry from './RouteEntry.svelte';
 </script>
 
 <div class="container">
-	<BusDetail
+	<RouteEntry
 		stops={[
 			{
 				...stopInfo[StopEnum.SEC],
@@ -19,8 +19,9 @@
 				position: 1
 			}
 		]}
+		busLocation={0.2}
 	/>
-	<BusDetail
+	<RouteEntry
 		stops={[
 			{
 				...stopInfo[StopEnum.SEC],
@@ -39,13 +40,13 @@
 </div>
 
 <style>
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    --container-width: 80%;
-    width: var(--container-width);
-    margin-left: calc((100% - var(--container-width)) / 2);
-    margin-top: 50px;
-  }
+	.container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		--container-width: 80%;
+		width: var(--container-width);
+		margin-left: calc((100% - var(--container-width)) / 2);
+		margin-top: 50px;
+	}
 </style>

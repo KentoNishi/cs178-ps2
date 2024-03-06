@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { StopWithPosition } from '$lib/ts/types';
+	import bus from '../assets/bus.png';
 
 	export let stops: StopWithPosition[];
 	export let busLocation = 0;
@@ -12,50 +13,40 @@
 		<div class="stop" style="left: calc({100 * stop.position}%);"></div>
 	{/each}
 
-	<div class="bus-icon" style="left: calc({100 * busLocation}%);">🚌</div>
+	<img src={bus} alt="bus" class="bus-icon" style="left: calc({100 * busLocation}%);" />
 </div>
 
 <style>
 	.container {
 		position: relative;
 		width: 100%;
-		height: 50px;
+		height: 80px;
 		align-content: center;
 	}
 
 	.route {
 		position: relative;
 		width: 100%;
-		height: 2px;
+		height: 5px;
+		border-radius: 20px;
 		background-color: black;
 	}
 
 	.stop {
 		position: absolute;
-		top: -4px;
-		width: 10px;
-		height: 10px;
-		background-color: red;
+		transform: translate(-7.5px, -10px);
+		width: 15px;
+		height: 15px;
+		background-color: crimson;
 		border-radius: 50%;
-	}
-
-	.stop-name {
-		position: absolute;
-		top: 15px;
-		white-space: nowrap;
-		font-size: 12px;
-		text-align: center;
-		transform: translateX(-50%);
 	}
 
 	.bus-icon {
 		position: absolute;
 		top: -12px;
-		width: 24px;
-		height: 24px;
-		font-size: 24px;
-		text-align: center;
-		line-height: 24px;
+		width: 30px;
+		height: 30px;
 		user-select: none;
+		transform: translate(-50%, -40%);
 	}
 </style>
