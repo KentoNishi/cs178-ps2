@@ -1,46 +1,62 @@
 <script lang="ts">
-	import type { StopWithPosition } from "$lib/ts/types";
+	import type { StopWithPosition } from '$lib/ts/types';
 
-  export let stops: StopWithPosition[];
-  export let busLocation = 0;
+	export let stops: StopWithPosition[];
+	export let busLocation = 0;
 </script>
 
 <div class="container">
-  <svg width="100%" height="100">
-    <!-- Route Line -->
-    <line x1="10" y1="50" x2="390" y2="50" class="route-line" />
+	<!-- Horizontal Route Line -->
+	<div class="route"></div>
+	{#each stops as stop}
+		<div class="stop" style="left: {stop.position * 360 - 5}px;"></div>
+	{/each}
 
-    <!-- Stops -->
-    {#each stops as stop}
-    <circle cx="{10 + stop.position * 380}" cy="50" r="5" class="stop-dot" />
-    <text x="{16 + stop.position * 380}" y="65" class="stop-name">{stop.stop_name}</text>
-    {/each}
-
-    <!-- Bus Icon (we could use png) -->
-    <text x="{10 + busLocation * 380}" y="40" class="bus-icon">&#128652;</text>
-  </svg>
+	<div class="bus-icon" style="left: {busLocation * 360 - 12}px;">🚌</div>
 </div>
 
 <style>
-  .route-line {
-    stroke: black;
-    stroke-width: 2;
-  }
+	.container {
+		position: relative;
+		width: 100%;
+		height: 50px;
+		align-content: center;
+	}
 
-  .stop-dot {
-    fill: red;
-  }
+	.route {
+		position: relative;
+		width: 90%;
+		height: 2px;
+		background-color: black;
+		margin-top: 50px;
+	}
 
-  .stop-name {
-    font-size: 12px;
-    text-anchor: middle;
-  }
+	.stop {
+		position: absolute;
+		top: -4px;
+		width: 10px;
+		height: 10px;
+		background-color: red;
+		border-radius: 50%;
+	}
 
-  .bus-icon {
-    font-size: 24px;
-  }
+	.stop-name {
+		position: absolute;
+		top: 15px;
+		white-space: nowrap;
+		font-size: 12px;
+		text-align: center;
+		transform: translateX(-50%);
+	}
 
-  .container {
-    margin-left: 10px;
-  }
+	.bus-icon {
+		position: absolute;
+		top: -12px;
+		width: 24px;
+		height: 24px;
+		font-size: 24px;
+		text-align: center;
+		line-height: 24px;
+		user-select: none;
+	}
 </style>
