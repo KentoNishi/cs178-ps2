@@ -1,26 +1,29 @@
 <script lang="ts">
 	import type { StopWithPosition } from '$lib/ts/types';
+	import busImg from '../assets/bus.png';
 
 	export let stops: StopWithPosition[];
 	export let busLocation = 0;
+	export let busName = '';
 </script>
 
 <div class="card">
 	<div class="container">
+		<div class="bus-name">{busName}</div>
 		<!-- Horizontal Route Line -->
 		<div class="route"></div>
 		{#each stops as stop}
 			<div class="stop" style="left: calc({100 * stop.position}%);"></div>
 		{/each}
 
-		<div class="bus-icon" style="left: calc({100 * busLocation}%);">🚌</div>
+		<img src={busImg} alt="bus" class="bus-icon" style="left: calc({100 * busLocation}%);" />
 	</div>
 </div>
 
 <style>
 	.card {
 		background-color: rgba(225, 225, 225, 1);
-		padding-top: 50px;
+		padding-top: 60px;
 		margin-top: 10px;
 		width: calc(100% - 8px);
 		display: flex;
@@ -36,6 +39,12 @@
 		width: 80%;
 		align-content: center;
 		--route-size: 5px;
+	}
+
+	.bus-name {
+		position: absolute;
+		font-size: medium;
+		transform: translate(-20px, -55px);
 	}
 
 	.route {
@@ -59,23 +68,12 @@
 		transform: translateY(calc(-50% - var(--route-size) / 2)) translateX(-50%);
 	}
 
-	.stop-name {
-		position: absolute;
-		top: 15px;
-		white-space: nowrap;
-		font-size: 12px;
-		text-align: center;
-		transform: translateX(-50%);
-	}
-
 	.bus-icon {
 		position: absolute;
 		width: 40px;
 		height: 40px;
 		font-size: 40px;
-		text-align: center;
-		line-height: 40px;
 		user-select: none;
-		transform: translate(-50%, calc(-30px - 50%));
+		transform: translate(-50%, calc(-20px - 50%));
 	}
 </style>
