@@ -1,13 +1,18 @@
 <script lang="ts">
 	import type { StopWithPosition } from '$lib/ts/types';
-	import busImg from '../assets/bus.png';
+	import Ripple from '@smui/ripple';
+	import busImg from '../assets/bus.svg';
 
 	export let stops: StopWithPosition[];
 	export let busLocation = 0;
 	export let busName = '';
 </script>
 
-<div class="card">
+<div
+	class="card"
+	use:Ripple={{ surface: true, color: 'secondary' }}
+	tabindex="0"
+	role="button">
 	<div class="container">
 		<div class="bus-name">{busName}</div>
 		<!-- Horizontal Route Line -->
@@ -19,19 +24,20 @@
 		<img src={busImg} alt="bus" class="bus-icon" style="left: calc({100 * busLocation}%);" />
 	</div>
 </div>
+<div class="line" />
 
 <style>
+	.line {
+		width: 100%;
+		height: 1px;
+		background-color: rgb(108, 108, 108);
+	}
 	.card {
-		background-color: rgba(225, 225, 225, 1);
 		padding-top: 60px;
-		margin-top: 10px;
-		width: calc(100% - 8px);
+		width: calc(100%);
 		display: flex;
 		justify-content: center;
 		padding-bottom: 15px;
-		border-radius: 10px;
-		box-shadow: 0px 5px 22px -3px rgb(200, 200, 200);
-		border: 4px solid rgb(197, 197, 197);
 	}
 
 	.container {
@@ -44,14 +50,15 @@
 	.bus-name {
 		position: absolute;
 		font-size: medium;
-		transform: translate(-20px, -55px);
+		transform: translate(-20px, -52.5px);
+		color: white;
 	}
 
 	.route {
 		position: relative;
 		width: 100%;
 		height: var(--route-size);
-		background-color: rgb(108, 108, 108);
+		background-color: var(--passio-green);
 		border-radius: 10px;
 	}
 
@@ -63,7 +70,7 @@
 		width: var(--inner-size);
 		height: var(--inner-size);
 		background-color: rgb(255, 255, 255);
-		border: var(--border-size) solid rgb(108, 108, 108);
+		border: var(--border-size) solid rgb(132, 132, 132);
 		border-radius: 50%;
 		transform: translateY(calc(-50% - var(--route-size) / 2)) translateX(-50%);
 	}
@@ -75,5 +82,6 @@
 		font-size: 40px;
 		user-select: none;
 		transform: translate(-50%, calc(-20px - 50%));
+		filter: invert(0.9);
 	}
 </style>

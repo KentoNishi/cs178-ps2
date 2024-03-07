@@ -30,6 +30,6 @@
     border-color: black;
     border-style: solid;
     border-radius: 20px;
-    background-color: white;
+    background-color: var(--dark-bg);
   }
 </style>
