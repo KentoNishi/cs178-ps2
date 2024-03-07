@@ -19,10 +19,14 @@ const fetchVehiclePositions = async () => {
 }
 
 setInterval(async () => {
-  const tripUpdates = await fetchTripUpdates();
-  const vehiclePositions = await fetchVehiclePositions();
-  const timestamp = Date.now();
-  const data = { tripUpdates, vehiclePositions, timestamp };
-  console.log(JSON.stringify(data));
-  fs.appendFileSync('data.txt', JSON.stringify(data) + '\n');
+  try {
+    const tripUpdates = await fetchTripUpdates();
+    const vehiclePositions = await fetchVehiclePositions();
+    const timestamp = Date.now();
+    const data = { tripUpdates, vehiclePositions, timestamp };
+    console.log(JSON.stringify(data));
+    fs.appendFileSync('data-3-8.txt', JSON.stringify(data) + '\n');
+  } catch (e) {
+    console.error(e);
+  }
 }, 1000);
