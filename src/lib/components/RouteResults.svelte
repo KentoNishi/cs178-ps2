@@ -1,8 +1,21 @@
 <script lang="ts">
-	import RouteEntry from './RouteEntry.svelte';
-	import { stopInfos, routeInfos } from '$lib/ts/data';
+	import { routeInfos } from '$lib/ts/data';
+	import { findPaths } from '$lib/ts/navigation';
+	import { onMount } from 'svelte';
 
-	console.log(stopInfos, routeInfos);
+	const tryNavigation = () => {
+		console.log(findPaths({
+			lat: 42.36797754163142,
+			lon: -71.11484132044114
+		}, {
+			lat: 42.362977,
+			lon: -71.127055
+		}, new Date('Wed Mar 13 2024 09:00:00 GMT-0400 (Eastern Daylight Time)').getTime()))
+	};
+	onMount(() => {
+		window.tryNavigation = tryNavigation;
+	})
+	// console.log(routeInfos);
 </script>
 
 <div class="outer-wrapper">
