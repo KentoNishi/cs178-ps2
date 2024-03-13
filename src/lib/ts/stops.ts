@@ -1,7 +1,7 @@
 export interface StopInfo {
   stop_id: number;
   stop_code: number;
-  stop_name: StopEnum;
+  stop_name: string;
   stop_desc: string;
   stop_lat: number;
   stop_lon: number;
@@ -13,39 +13,39 @@ export interface StopInfo {
 }
 
 export enum StopEnum {
-  ONE_WESTERN_AVE = '1 Western Ave',
-  MEMORIAL_DRIVE = '784 Memorial Drive',
-  BARRYS_CORNER_NORTHBOUND = 'Barry\'s Corner (Northbound)',
-  BARRYS_CORNER_SOUTHBOUND = 'Barry\'s Corner (Southbound)',
-  CAMBRIDGE_COMMON = 'Cambridge Common',
-  HARVARD_SQUARE_NORTHBOUND = 'Harvard Square (Northbound)',
-  HARVARD_SQUARE_SOUTHBOUND = 'Harvard Square (Southbound)',
-  KENNEDY_SCHOOL_NORTHBOUND = 'Kennedy School (Northbound)',
-  KENNEDY_SCHOOL_SOUTHBOUND = 'Kennedy School (Southbound)',
-  LAMONT_LIBRARY = 'Lamont Library',
-  LAW_SCHOOL = 'Law School (WCC)',
-  LEVERETT_HOUSE = 'Leverett House',
-  MASS_AND_GARDEN = 'Mass and Garden',
-  MATHER_HOUSE = 'Mather House',
-  MAXWELL_DWORKIN = 'Maxwell Dworkin',
-  MEMORIAL_HALL = 'Memorial Hall',
-  QUAD = 'Quad',
-  RADCLIFFE_YARD = 'Radcliffe Yard',
-  SCIENCE_CENTER = 'Science Center',
-  SEC = 'SEC',
-  SEVER_GATE = 'Sever Gate',
-  STADIUM_NORTHBOUND = 'Stadium (Northbound)',
-  STADIUM_SOUTHBOUND = 'Stadium (Southbound)',
-  THE_INN = 'The Inn',
-  WIDENER_GATE = 'Widener Gate',
-  WINTHROP_HOUSE = 'Winthrop House',
+  ONE_WESTERN_AVE = 5036,
+  MEMORIAL_DRIVE = 58381,
+  BARRYS_CORNER_NORTHBOUND = 63189,
+  BARRYS_CORNER_SOUTHBOUND = 63190,
+  CAMBRIDGE_COMMON = 132600,
+  HARVARD_SQUARE_NORTHBOUND = 5041,
+  HARVARD_SQUARE_SOUTHBOUND = 58344,
+  KENNEDY_SCHOOL_NORTHBOUND = 5040,
+  KENNEDY_SCHOOL_SOUTHBOUND = 5054,
+  LAMONT_LIBRARY = 5045,
+  LAW_SCHOOL = 5042,
+  LEVERETT_HOUSE = 6854,
+  MASS_AND_GARDEN = 5050,
+  MATHER_HOUSE = 5046,
+  MAXWELL_DWORKIN = 5043,
+  MEMORIAL_HALL = 5044,
+  QUAD = 5049,
+  RADCLIFFE_YARD = 23509,
+  SCIENCE_CENTER = 6248,
+  SEC = 58343,
+  SEVER_GATE = 154627,
+  STADIUM_NORTHBOUND = 5039,
+  STADIUM_SOUTHBOUND = 23930,
+  THE_INN = 5047,
+  WIDENER_GATE = 5048,
+  WINTHROP_HOUSE = 5051,
 };
 
 export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.ONE_WESTERN_AVE]: {
     "stop_id": 5036,
     "stop_code": 5036,
-    "stop_name": StopEnum.ONE_WESTERN_AVE,
+    "stop_name": "1 Western Ave",
     "stop_desc": "",
     "stop_lat": 42.364114,
     "stop_lon": -71.119075,
@@ -58,7 +58,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.MEMORIAL_DRIVE]: {
     "stop_id": 58381,
     "stop_code": 58381,
-    "stop_name": StopEnum.MEMORIAL_DRIVE,
+    "stop_name": "784 Memorial Drive",
     "stop_desc": "",
     "stop_lat": 42.359703,
     "stop_lon": -71.114945,
@@ -71,7 +71,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.BARRYS_CORNER_NORTHBOUND]: {
     "stop_id": 63189,
     "stop_code": 63189,
-    "stop_name": StopEnum.BARRYS_CORNER_NORTHBOUND,
+    "stop_name": "Barry's Corner (Northbound)",
     "stop_desc": "",
     "stop_lat": 42.363958424,
     "stop_lon": -71.127741708,
@@ -84,7 +84,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.BARRYS_CORNER_SOUTHBOUND]: {
     "stop_id": 63190,
     "stop_code": 63190,
-    "stop_name": StopEnum.BARRYS_CORNER_SOUTHBOUND,
+    "stop_name": "Barry's Corner (Southbound)",
     "stop_desc": "",
     "stop_lat": 42.363936034,
     "stop_lon": -71.127861727,
@@ -97,7 +97,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.CAMBRIDGE_COMMON]: {
     "stop_id": 132600,
     "stop_code": 132600,
-    "stop_name": StopEnum.CAMBRIDGE_COMMON,
+    "stop_name": "Cambridge Common",
     "stop_desc": "",
     "stop_lat": 42.376994673,
     "stop_lon": -71.122417866,
@@ -110,7 +110,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.HARVARD_SQUARE_NORTHBOUND]: {
     "stop_id": 5041,
     "stop_code": 5041,
-    "stop_name": StopEnum.HARVARD_SQUARE_NORTHBOUND,
+    "stop_name": "Harvard Square (Northbound)",
     "stop_desc": "",
     "stop_lat": 42.372722,
     "stop_lon": -71.119965,
@@ -123,7 +123,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.HARVARD_SQUARE_SOUTHBOUND]: {
     "stop_id": 58344,
     "stop_code": 58344,
-    "stop_name": StopEnum.HARVARD_SQUARE_SOUTHBOUND,
+    "stop_name": "Harvard Square (Southbound)",
     "stop_desc": "",
     "stop_lat": 42.373378883,
     "stop_lon": -71.119734232,
@@ -136,7 +136,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.KENNEDY_SCHOOL_NORTHBOUND]: {
     "stop_id": 5040,
     "stop_code": 5040,
-    "stop_name": StopEnum.KENNEDY_SCHOOL_NORTHBOUND,
+    "stop_name": "Kennedy School (Northbound)",
     "stop_desc": "",
     "stop_lat": 42.371524,
     "stop_lon": -71.120985,
@@ -149,7 +149,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.KENNEDY_SCHOOL_SOUTHBOUND]: {
     "stop_id": 5054,
     "stop_code": 5054,
-    "stop_name": StopEnum.KENNEDY_SCHOOL_SOUTHBOUND,
+    "stop_name": "Kennedy School (Southbound)",
     "stop_desc": "",
     "stop_lat": 42.371203,
     "stop_lon": -71.121339,
@@ -162,7 +162,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.LAMONT_LIBRARY]: {
     "stop_id": 5045,
     "stop_code": 5045,
-    "stop_name": StopEnum.LAMONT_LIBRARY,
+    "stop_name": "Lamont Library",
     "stop_desc": "",
     "stop_lat": 42.37288,
     "stop_lon": -71.115008,
@@ -175,7 +175,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.LAW_SCHOOL]: {
     "stop_id": 5042,
     "stop_code": 5042,
-    "stop_name": StopEnum.LAW_SCHOOL,
+    "stop_name": "Law School (WCC)",
     "stop_desc": "",
     "stop_lat": 42.377977084,
     "stop_lon": -71.119937392,
@@ -188,7 +188,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.LEVERETT_HOUSE]: {
     "stop_id": 6854,
     "stop_code": 6854,
-    "stop_name": StopEnum.LEVERETT_HOUSE,
+    "stop_name": "Leverett House",
     "stop_desc": "",
     "stop_lat": 42.370083645,
     "stop_lon": -71.116713434,
@@ -201,7 +201,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.MASS_AND_GARDEN]: {
     "stop_id": 5050,
     "stop_code": 5050,
-    "stop_name": StopEnum.MASS_AND_GARDEN,
+    "stop_name": "Mass and Garden",
     "stop_desc": "",
     "stop_lat": 42.375187466,
     "stop_lon": -71.119467061,
@@ -214,7 +214,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.MATHER_HOUSE]: {
     "stop_id": 5046,
     "stop_code": 5046,
-    "stop_name": StopEnum.MATHER_HOUSE,
+    "stop_name": "Mather House",
     "stop_desc": "",
     "stop_lat": 42.368758709,
     "stop_lon": -71.115333438,
@@ -227,7 +227,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.MAXWELL_DWORKIN]: {
     "stop_id": 5043,
     "stop_code": 5043,
-    "stop_name": StopEnum.MAXWELL_DWORKIN,
+    "stop_name": "Maxwell Dworkin",
     "stop_desc": "",
     "stop_lat": 42.378933,
     "stop_lon": -71.11663,
@@ -240,7 +240,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.MEMORIAL_HALL]: {
     "stop_id": 5044,
     "stop_code": 5044,
-    "stop_name": StopEnum.MEMORIAL_HALL,
+    "stop_name": "Memorial Hall",
     "stop_desc": "",
     "stop_lat": 42.37645186,
     "stop_lon": -71.114392997,
@@ -253,7 +253,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.QUAD]: {
     "stop_id": 5049,
     "stop_code": 5049,
-    "stop_name": StopEnum.QUAD,
+    "stop_name": "Quad",
     "stop_desc": "",
     "stop_lat": 42.381867,
     "stop_lon": -71.125325,
@@ -266,7 +266,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.RADCLIFFE_YARD]: {
     "stop_id": 23509,
     "stop_code": 23509,
-    "stop_name": StopEnum.RADCLIFFE_YARD,
+    "stop_name": "Radcliffe Yard",
     "stop_desc": "",
     "stop_lat": 42.3765,
     "stop_lon": -71.12212,
@@ -279,7 +279,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.SCIENCE_CENTER]: {
     "stop_id": 6248,
     "stop_code": 6248,
-    "stop_name": StopEnum.SCIENCE_CENTER,
+    "stop_name": "Science Center",
     "stop_desc": "",
     "stop_lat": 42.376901687,
     "stop_lon": -71.115974486,
@@ -292,7 +292,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.SEC]: {
     "stop_id": 58343,
     "stop_code": 58343,
-    "stop_name": StopEnum.SEC,
+    "stop_name": "SEC",
     "stop_desc": "",
     "stop_lat": 42.363328644,
     "stop_lon": -71.125392617,
@@ -305,7 +305,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.SEVER_GATE]: {
     "stop_id": 154627,
     "stop_code": 154627,
-    "stop_name": StopEnum.SEVER_GATE,
+    "stop_name": "Sever Gate",
     "stop_desc": "",
     "stop_lat": 42.374634042,
     "stop_lon": -71.114510008,
@@ -318,7 +318,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.STADIUM_NORTHBOUND]: {
     "stop_id": 5039,
     "stop_code": 5039,
-    "stop_name": StopEnum.STADIUM_NORTHBOUND,
+    "stop_name": "Stadium (Northbound)",
     "stop_desc": "",
     "stop_lat": 42.367121429,
     "stop_lon": -71.124887448,
@@ -331,7 +331,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.STADIUM_SOUTHBOUND]: {
     "stop_id": 23930,
     "stop_code": 23930,
-    "stop_name": StopEnum.STADIUM_SOUTHBOUND,
+    "stop_name": "Stadium (Southbound)",
     "stop_desc": "",
     "stop_lat": 42.367024629,
     "stop_lon": -71.125015193,
@@ -344,7 +344,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.THE_INN]: {
     "stop_id": 5047,
     "stop_code": 5047,
-    "stop_name": StopEnum.THE_INN,
+    "stop_name": "The Inn",
     "stop_desc": "",
     "stop_lat": 42.372127,
     "stop_lon": -71.115427,
@@ -357,7 +357,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.WIDENER_GATE]: {
     "stop_id": 5048,
     "stop_code": 5048,
-    "stop_name": StopEnum.WIDENER_GATE,
+    "stop_name": "Widener Gate",
     "stop_desc": "",
     "stop_lat": 42.372843815,
     "stop_lon": -71.116972399,
@@ -370,7 +370,7 @@ export const stopInfo: Record<StopEnum, StopInfo> = {
   [StopEnum.WINTHROP_HOUSE]: {
     "stop_id": 5051,
     "stop_code": 5051,
-    "stop_name": StopEnum.WINTHROP_HOUSE,
+    "stop_name": "Winthrop House",
     "stop_desc": "",
     "stop_lat": 42.371468397,
     "stop_lon": -71.117267311,
