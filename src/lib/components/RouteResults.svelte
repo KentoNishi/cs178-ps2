@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { StopEnum, stopInfo } from '$lib/ts/stops';
 	import RouteEntry from './RouteEntry.svelte';
+	import { stopInfos, routeInfos } from '$lib/ts/data';
+
+	console.log(stopInfos, routeInfos);
 </script>
 
 <div class="outer-wrapper">
@@ -8,7 +10,7 @@
 		Shuttle Options
 	</div>
 	<div class="container">
-		<RouteEntry
+		<!-- <RouteEntry
 			stops={[
 				{
 					...stopInfo[StopEnum.SEC],
@@ -43,7 +45,7 @@
 			]}
 			busLocation={0.0}
 			busName={'QYE'}
-		/>
+		/> -->
 	</div>
 </div>
 
