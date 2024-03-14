@@ -29,7 +29,7 @@ export interface Trip {
   route_id: number;
   service_id: number;
   trip_id: number;
-  trip_headsign: number;
+  trip_headsign: string;
   trip_short_name: string;
   direction_id: number;
   block_id: number;

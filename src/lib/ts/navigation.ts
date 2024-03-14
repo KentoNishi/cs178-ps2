@@ -5,7 +5,7 @@ import type { RouteInfo, StopInfo, StopTime } from "./data";
 import { routeInfos, stopInfos } from "./data";
 import type { GPS } from './types';
 
-const WALKING_SPEED = 3;
+const WALKING_SPEED = 4;
 
 interface StopTimeWithMeta {
   stopTime: StopTime;
@@ -25,6 +25,7 @@ interface Path {
   walkingTimeFromEndStop: number;
   totalWalkingTime: number;
   totalRidingTime: number;
+  trip: StopTime['trip'];
 };
 
 const adjustTime = (time: number, currentTime: Date): number => {
@@ -40,6 +41,17 @@ const adjustTime = (time: number, currentTime: Date): number => {
   }
   return timeDate.getTime();
 };
+
+export const timeToWalk = (origin: GPS, destination: GPS): number => {
+  return getDistance(origin.lat, origin.lon, destination.lat, destination.lon) / WALKING_SPEED * 60;
+}
+
+const sortFunc = (a: Path, b: Path): number => {
+  if (a.tripDuration === b.tripDuration) {
+    return a.totalWalkingTime - b.totalWalkingTime;
+  }
+  return a.tripDuration - b.tripDuration;
+}
 
 export const findPaths = (
   origin: GPS,
@@ -83,12 +95,10 @@ export const findPaths = (
         if (!startStopTime) continue;
         const departureDate = new Date(adjustTime(startStopTime.departure_time, currentDateWithWalk));
         const endStopTime = endStopInfo.stopTimes.filter(item => {
-          return (
-            item.trip.trip_id === startStopTime.trip.trip_id ||
-            item.trip.trip_headsign === startStopTime.trip.trip_headsign ||
-            item.trip.trip_id === startStopTime.trip.trip_headsign // ||
-            // item.trip.trip_headsign === startStopTime.trip.trip_id
-          );
+          const diff = ((item.trip.trip_headsign as unknown as number) - (startStopTime.trip.trip_headsign as unknown as number));
+          return item.trip.trip_id === startStopTime.trip.trip_id ||
+            (item.trip.trip_headsign && item.trip.trip_headsign == startStopTime.trip.trip_headsign) ||
+            (Math.abs(diff) <= 1 && diff >= 0);
         }).sort((a, b) => adjustTime(a.arrival_time, departureDate) - adjustTime(b.arrival_time, departureDate))[0];
         if (!endStopTime) continue;
         const distanceFromEndStop = getDistance(destination.lat, destination.lon, endStopInfo.stop_lat, endStopInfo.stop_lon);
@@ -109,11 +119,28 @@ export const findPaths = (
           walkingTimeFromEndStop,
           tripDuration: (tripEndTime - tripStartTime) / 1000 / 60,
           totalWalkingTime: walkingTimeToStartStop + walkingTimeFromEndStop,
-          totalRidingTime: busDestinationArrivalTime - busOriginDepartureTime
+          totalRidingTime: busDestinationArrivalTime - busOriginDepartureTime,
+          trip: endStopTime.trip
         };
-        if (bestPaths.length < N || path.tripEndTime < bestPaths[bestPaths.length - 1].tripEndTime) {
+        const index = bestPaths.findIndex(p => {
+          return p.route.route_id === path.route.route_id;
+        });
+        if (index !== -1) {
+          if (bestPaths[index].tripDuration > path.tripDuration || (
+            bestPaths[index].tripDuration === path.tripDuration &&
+            bestPaths[index].totalWalkingTime > path.totalWalkingTime
+          )) {
+            bestPaths[index] = path;
+            bestPaths.sort(sortFunc);
+          }
+          continue;
+        }
+        if (
+          bestPaths.length < N ||
+          path.tripDuration < bestPaths[bestPaths.length - 1].tripDuration
+        ) {
           bestPaths.push(path);
-          bestPaths.sort((a, b) => a.tripEndTime - b.tripEndTime);
+          bestPaths.sort(sortFunc);
           if (bestPaths.length > N) bestPaths.pop();
         }
       }

@@ -1,24 +1,26 @@
 <script lang="ts">
 	import { routeInfos } from '$lib/ts/data';
-	import { findPaths } from '$lib/ts/navigation';
+	import { findPaths, timeToWalk } from '$lib/ts/navigation';
 	import { onMount } from 'svelte';
 
 	const tryNavigation = () => {
 		const start = {
-			lat: 42.36797754163142,
-			lon: -71.11484132044114
+			lat: 42.368761836300095, 
+			lon: -71.11521053159292
 		};
 		const end = {
-			lat: 42.362977,
-			lon: -71.127055
+			lat: 42.36348667132956,
+			lon: -71.12602311114634
 		};
-		console.log('Navigating from', start, 'to', end);
-		return findPaths(
+		const date = new Date('Wed Mar 13 2024 9:00:00 GMT-0400 (Eastern Daylight Time)');
+		console.log('Navigating from', start, '(Mather) to', end, '(SEC) at', date);
+		const foundPaths = findPaths(
 			start,
 			end,
-			new Date('Wed Mar 13 2024 09:10:00 GMT-0400 (Eastern Daylight Time)').getTime(),
-			5
+			date.getTime(),
+			3
 		);
+		return foundPaths;
 	};
 	onMount(() => {
 		const paths = tryNavigation();
