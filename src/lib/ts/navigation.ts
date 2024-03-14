@@ -85,7 +85,9 @@ export const findPaths = (
         const endStopTime = endStopInfo.stopTimes.filter(item => {
           return (
             item.trip.trip_id === startStopTime.trip.trip_id ||
-            item.trip.trip_headsign === startStopTime.trip.trip_id
+            item.trip.trip_headsign === startStopTime.trip.trip_headsign ||
+            item.trip.trip_id === startStopTime.trip.trip_headsign // ||
+            // item.trip.trip_headsign === startStopTime.trip.trip_id
           );
         }).sort((a, b) => adjustTime(a.arrival_time, departureDate) - adjustTime(b.arrival_time, departureDate))[0];
         if (!endStopTime) continue;
@@ -109,9 +111,9 @@ export const findPaths = (
           totalWalkingTime: walkingTimeToStartStop + walkingTimeFromEndStop,
           totalRidingTime: busDestinationArrivalTime - busOriginDepartureTime
         };
-        if (bestPaths.length < N || path.tripDuration < bestPaths[bestPaths.length - 1].tripDuration) {
+        if (bestPaths.length < N || path.tripEndTime < bestPaths[bestPaths.length - 1].tripEndTime) {
           bestPaths.push(path);
-          bestPaths.sort((a, b) => a.tripDuration - b.tripDuration);
+          bestPaths.sort((a, b) => a.tripEndTime - b.tripEndTime);
           if (bestPaths.length > N) bestPaths.pop();
         }
       }
