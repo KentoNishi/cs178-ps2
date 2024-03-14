@@ -1,7 +1,9 @@
 import type { StopInfo } from "./data";
+import type { PathWithRealtimeUncertainty } from "./navigation";
 
 export interface TickWithPosition extends StopInfo {
   position: number;
+  uncertainty: PathWithRealtimeUncertainty['uncertainty']
 }
 
 export interface GPS {

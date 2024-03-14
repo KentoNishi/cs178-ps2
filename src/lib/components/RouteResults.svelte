@@ -27,10 +27,6 @@
 		busLocation: number,
 		busName: string
 	})[] = [];
-	let sharedParams: ({
-		earliestTripStart: number,
-		latestTripEnd: number
-	})
 	onMount(async () => {
 		const paths = await tryNavigation();
 		paths.forEach(path => {
@@ -48,32 +44,31 @@
 		let latestTripEnd = -Infinity;
 		paths.forEach(path => {
 			earliestTripStart = Math.min(
-				path.tripStartTime - path.walkingTimeToStartStop,
-				path.uncertainty.departureLowEnd - path.walkingTimeToStartStop,
-				Date.now() - (path.realtime.expectedArrivalAtEndStop - Date.now()),
+				// path.tripStartTime - path.walkingTimeToStartStop,
+				// path.tripStartTime,
+				(Date.now() - Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now())),
 				earliestTripStart,
 			);
 			latestTripEnd = Math.max(
-				path.tripEndTime + path.walkingTimeFromEndStop,
-				path.uncertainty.arrivalHighEnd + path.walkingTimeFromEndStop,
+				// path.tripEndTime,
+				path.busDestinationArrivalTime,
 				latestTripEnd
 			);
 		});
+		console.log(earliestTripStart);
 		displayedResults = paths.map(path => ({
 			ticks: [{
 				...path.start.stopInfo,
-				position: (path.tripStartTime - earliestTripStart) / (latestTripEnd - earliestTripStart)
+				position: (path.uncertainty.departureLowEnd - earliestTripStart) / (latestTripEnd - earliestTripStart),
+				uncertainty: path.uncertainty
 			}, {
 				...path.end.stopInfo,
-				position: (path.tripEndTime - earliestTripStart) / (latestTripEnd - earliestTripStart)
+				position: (path.uncertainty.arrivalHighEnd - earliestTripStart) / (latestTripEnd - earliestTripStart),
+				uncertainty: path.uncertainty
 			}],
-			busLocation: ((Date.now() - (path.realtime.expectedArrivalAtEndStop - Date.now())) - earliestTripStart) / (latestTripEnd - earliestTripStart),
+			busLocation: ((Date.now() - Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now())) - earliestTripStart) / (latestTripEnd - earliestTripStart),
 			busName: path.route.route_long_name
 		}));
-		sharedParams = {
-			earliestTripStart,
-			latestTripEnd
-		};
 	});
 </script>
 
@@ -84,7 +79,7 @@
 	<div class="container">
 		<div class="line" />
 		{#each displayedResults as entry}
-			<RouteEntry {...entry} {...sharedParams} />
+			<RouteEntry {...entry} />
 			<div class="line" />
 		{/each}
 	</div>
