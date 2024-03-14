@@ -4,7 +4,7 @@
 // import rawTrips from '../data/trips.txt?raw';
 import { readFileSync, writeFileSync } from 'fs';
 import { convertCsvToArray, convertCsvToObject, getDateObject } from '../src/lib/ts/utils';
-import { isSameTrip } from '../src/lib/ts/navigation';
+// import { isSameTrip } from '../src/lib/ts/navigation';
 import type { Trip, StopTime, StopInfo, PartialStopInfo, PartialRouteInfo, RouteInfo } from '../src/lib/ts/data';
 const rawStops = readFileSync('./src/lib/data/stops.txt', 'utf8');
 const rawRoutes = readFileSync('./src/lib/data/routes.txt', 'utf8');
@@ -17,9 +17,9 @@ const trips = convertCsvToArray(rawTrips) as Trip[];
 const stopTimes = convertCsvToArray(rawStopTimes).map((item: any) => {
   return {
     ...item,
-    arrival_time: getDateObject(item.arrival_time),
-    departure_time: getDateObject(item.departure_time),
-    trip: trips.find(trip => isSameTrip(trip, item)) as Trip
+    arrival_time: getDateObject(item.arrival_time).getTime(),
+    departure_time: getDateObject(item.departure_time).getTime(),
+    trip: trips.find(trip => trip.trip_id === item.trip_id) as Trip
   };
 }) as StopTime[];
 
@@ -50,10 +50,10 @@ const constructRouteInfos = (): RouteInfo[] => {
     });
     const routeStops = {} as Record<number, StopTime[]>;
     routeStopsList.forEach(stopTime => {
-      if (routeStops[stopTime.stop_sequence]) {
-        routeStops[stopTime.stop_sequence].push(stopTime);
+      if (routeStops[stopTime.stop_id]) {
+        routeStops[stopTime.stop_id].push(stopTime);
       } else {
-        routeStops[stopTime.stop_sequence] = [stopTime];
+        routeStops[stopTime.stop_id] = [stopTime];
       }
     });
     for (const stopSequence in routeStops) {
@@ -61,7 +61,8 @@ const constructRouteInfos = (): RouteInfo[] => {
     }
     return {
       ...route,
-      routeStops: routeStops
+      routeStops: routeStops,
+      maxRouteSequence: Math.max(...Object.keys(routeStops).map((key) => Math.max(...routeStops[key].map(stopTime => stopTime.stop_sequence))))
     };
   });
   return routeInfos;

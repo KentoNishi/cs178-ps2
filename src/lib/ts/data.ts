@@ -23,6 +23,7 @@ export interface PartialRouteInfo {
   route_type: number;
   route_color: string;
   route_text_color: string;
+  maxRouteSequence: number;
 };
 
 export interface Trip {
