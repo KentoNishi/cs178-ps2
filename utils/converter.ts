@@ -4,6 +4,7 @@
 // import rawTrips from '../data/trips.txt?raw';
 import { readFileSync, writeFileSync } from 'fs';
 import { convertCsvToArray, convertCsvToObject, getDateObject } from '../src/lib/ts/utils';
+import { isSameTrip } from '../src/lib/ts/navigation';
 import type { Trip, StopTime, StopInfo, PartialStopInfo, PartialRouteInfo, RouteInfo } from '../src/lib/ts/data';
 const rawStops = readFileSync('./src/lib/data/stops.txt', 'utf8');
 const rawRoutes = readFileSync('./src/lib/data/routes.txt', 'utf8');
@@ -18,7 +19,7 @@ const stopTimes = convertCsvToArray(rawStopTimes).map((item: any) => {
     ...item,
     arrival_time: getDateObject(item.arrival_time),
     departure_time: getDateObject(item.departure_time),
-    trip: trips.find(trip => trip.trip_id === item.trip_id || trip.trip_headsign === item.trip_headsign)
+    trip: trips.find(trip => isSameTrip(trip, item)) as Trip
   };
 }) as StopTime[];
 

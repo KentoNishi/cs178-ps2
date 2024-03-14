@@ -12,7 +12,7 @@
 			lat: 42.36348667132956,
 			lon: -71.12602311114634
 		};
-		const date = new Date('Wed Mar 13 2024 9:00:00 GMT-0400 (Eastern Daylight Time)');
+		const date = new Date(); // new Date('Wed Mar 13 2024 9:10:00 GMT-0400 (Eastern Daylight Time)');
 		console.log('Navigating from', start, '(Mather) to', end, '(SEC) at', date);
 		const foundPaths = findPaths(
 			start,

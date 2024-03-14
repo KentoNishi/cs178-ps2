@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import getDistance from 'gps-distance';
-import type { RouteInfo, StopInfo, StopTime } from "./data";
+import type { RouteInfo, StopInfo, StopTime, Trip } from "./data";
 import { routeInfos, stopInfos } from "./data";
 import type { GPS } from './types';
 
@@ -53,6 +53,13 @@ const sortFunc = (a: Path, b: Path): number => {
   return a.tripDuration - b.tripDuration;
 }
 
+export const isSameTrip = (item: Trip, startStopTime: Trip): boolean => {
+  const diff = ((item.trip_headsign as unknown as number) - (startStopTime.trip_headsign as unknown as number));
+  return item.trip_id === startStopTime.trip_id ||
+    (item.trip_headsign == startStopTime.trip_headsign) ||
+    (Math.abs(diff) <= 1 && diff >= 0);
+}
+
 export const findPaths = (
   origin: GPS,
   destination: GPS,
@@ -94,12 +101,7 @@ export const findPaths = (
         const startStopTime = startStopInfo.stopTimes.sort((a, b) => adjustTime(a.arrival_time, currentDateWithWalk) - adjustTime(b.arrival_time, currentDateWithWalk))[0];
         if (!startStopTime) continue;
         const departureDate = new Date(adjustTime(startStopTime.departure_time, currentDateWithWalk));
-        const endStopTime = endStopInfo.stopTimes.filter(item => {
-          const diff = ((item.trip.trip_headsign as unknown as number) - (startStopTime.trip.trip_headsign as unknown as number));
-          return item.trip.trip_id === startStopTime.trip.trip_id ||
-            (item.trip.trip_headsign && item.trip.trip_headsign == startStopTime.trip.trip_headsign) ||
-            (Math.abs(diff) <= 1 && diff >= 0);
-        }).sort((a, b) => adjustTime(a.arrival_time, departureDate) - adjustTime(b.arrival_time, departureDate))[0];
+        const endStopTime = endStopInfo.stopTimes.filter(item => isSameTrip(item.trip, startStopTime.trip)).sort((a, b) => adjustTime(a.arrival_time, departureDate) - adjustTime(b.arrival_time, departureDate))[0];
         if (!endStopTime) continue;
         const distanceFromEndStop = getDistance(destination.lat, destination.lon, endStopInfo.stop_lat, endStopInfo.stop_lon);
         const walkingTimeFromEndStop = distanceFromEndStop / WALKING_SPEED * 60;
