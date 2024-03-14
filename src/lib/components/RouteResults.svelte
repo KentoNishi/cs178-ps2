@@ -1,6 +1,8 @@
 <script lang="ts">
+	import RouteEntry from './RouteEntry.svelte';
 	import { getPaths } from '$lib/ts/navigation';
 	import { onMount } from 'svelte';
+	import type { TickWithPosition } from '$lib/ts/types';
 
 	const tryNavigation = async () => {
 		const start = {
@@ -20,6 +22,15 @@
 		);
 		return foundPaths;
 	};
+	let displayedResults: ({
+		ticks: TickWithPosition[],
+		busLocation: number,
+		busName: string
+	})[] = [];
+	let sharedParams: ({
+		earliestTripStart: number,
+		latestTripEnd: number
+	})
 	onMount(async () => {
 		const paths = await tryNavigation();
 		paths.forEach(path => {
@@ -33,55 +44,58 @@
 				new Date(path.uncertainty.arrivalHighEnd).toLocaleTimeString()
 			}. walk ${path.walkingTimeFromEndStop} minutes. total time ${path.tripDuration} minutes.`);
 		});
-	})
-	// console.log(routeInfos);
+		let earliestTripStart = Infinity;
+		let latestTripEnd = -Infinity;
+		paths.forEach(path => {
+			earliestTripStart = Math.min(
+				path.tripStartTime - path.walkingTimeToStartStop,
+				path.uncertainty.departureLowEnd - path.walkingTimeToStartStop,
+				Date.now() - (path.realtime.expectedArrivalAtEndStop - Date.now()),
+				earliestTripStart,
+			);
+			latestTripEnd = Math.max(
+				path.tripEndTime + path.walkingTimeFromEndStop,
+				path.uncertainty.arrivalHighEnd + path.walkingTimeFromEndStop,
+				latestTripEnd
+			);
+		});
+		displayedResults = paths.map(path => ({
+			ticks: [{
+				...path.start.stopInfo,
+				position: (path.tripStartTime - earliestTripStart) / (latestTripEnd - earliestTripStart)
+			}, {
+				...path.end.stopInfo,
+				position: (path.tripEndTime - earliestTripStart) / (latestTripEnd - earliestTripStart)
+			}],
+			busLocation: ((Date.now() - (path.realtime.expectedArrivalAtEndStop - Date.now())) - earliestTripStart) / (latestTripEnd - earliestTripStart),
+			busName: path.route.route_long_name
+		}));
+		sharedParams = {
+			earliestTripStart,
+			latestTripEnd
+		};
+	});
 </script>
 
 <div class="outer-wrapper">
-	<div style="font-size: 1.75rem; font-weight: bold;">
+	<div style="font-size: 1.5rem; font-weight: bold; padding-bottom: 8px;">
 		Shuttle Options
 	</div>
 	<div class="container">
-		<!-- <RouteEntry
-			stops={[
-				{
-					...stopInfo[StopEnum.SEC],
-					position: 0.1
-				},
-				{
-					...stopInfo[StopEnum.BARRYS_CORNER_NORTHBOUND],
-					position: 0.3
-				},
-				{
-					...stopInfo[StopEnum.SEVER_GATE],
-					position: 1
-				}
-			]}
-			busLocation={0.3}
-			busName={'SEC Express'}
-		/>
-		<RouteEntry
-			stops={[
-				{
-					...stopInfo[StopEnum.SEC],
-					position: 0.2
-				},
-				{
-					...stopInfo[StopEnum.BARRYS_CORNER_NORTHBOUND],
-					position: 0.4
-				},
-				{
-					...stopInfo[StopEnum.SEVER_GATE],
-					position: 1
-				}
-			]}
-			busLocation={0.0}
-			busName={'QYE'}
-		/> -->
+		<div class="line" />
+		{#each displayedResults as entry}
+			<RouteEntry {...entry} {...sharedParams} />
+			<div class="line" />
+		{/each}
 	</div>
 </div>
 
 <style>
+	.line {
+		width: 100%;
+		height: 1px;
+		background-color: rgb(108, 108, 108);
+	}
 	.outer-wrapper {
 		margin: 10px;
 	}

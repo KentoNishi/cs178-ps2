@@ -1,6 +1,6 @@
 import type { StopInfo } from "./data";
 
-export interface StopWithPosition extends StopInfo {
+export interface TickWithPosition extends StopInfo {
   position: number;
 }
 

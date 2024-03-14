@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import getDistance from 'gps-distance';
-import type { RouteInfo, StopInfo, StopTime, Trip } from "./data";
+import type { RouteInfo, StopInfo, StopTime } from "./data";
 import { routeInfos, stopInfos } from "./data";
 import type { GPS, TripUpdates, VehiclePositions } from './types';
 
@@ -106,6 +106,7 @@ export const findPaths = (
   //   route.routeStops.forEach(startStop => {
   //     route.routeStops.forEach(endStop => {
   const distanceToDestination = getDistance(origin.lat, origin.lon, destination.lat, destination.lon);
+  const walkingTime = timeToWalk(origin, destination);
   for (const route of routeInfos) {
     // for (const startStopKey of Object.keys(route.routeStops)) {
     let startStopKey = -1;
@@ -122,7 +123,6 @@ export const findPaths = (
     if (startStopKey === -1) continue;
     const startStopInfo = stopInfos[route.routeStops[startStopKey as unknown as number][0].stop_id];
     const distanceToStartStop = getDistance(origin.lat, origin.lon, startStopInfo.stop_lat, startStopInfo.stop_lon);
-    // if (distanceToStartStop > distanceToDestination) continue;
     // for (const endStopKey of Object.keys(route.routeStops)) 
     let endStopKey = -1;
     // pick the closest stop to the destination
@@ -157,6 +157,7 @@ export const findPaths = (
     const tripEndTime = new Date(adjustTime(endStopTime.arrival_time, departureDate) + walkingTimeFromEndStop * 60 * 1000).getTime();
     const busOriginDepartureTime = adjustTime(startStopTime.departure_time, currentDate);
     const busDestinationArrivalTime = adjustTime(endStopTime.arrival_time, departureDate);
+    if (distanceToStartStop + distanceFromEndStop > distanceToDestination) continue;
     const path: Path = {
       start: { stopTime: startStopTime, stopInfo: startStopInfo },
       end: { stopTime: endStopTime, stopInfo: endStopInfo },
@@ -193,7 +194,9 @@ export const findPaths = (
     }
     // }
   }
-  return bestPaths;
+  return bestPaths.filter(item => {
+    return item.tripEndTime > currentTime && item.tripEndTime < currentTime + 2 * 60 * 60 * 1000;
+  });
 };
 
 const augmentRealtimeData = async (path: Path): Promise<PathWithRealtimeData> => {
