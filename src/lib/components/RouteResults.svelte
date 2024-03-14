@@ -4,16 +4,27 @@
 	import { onMount } from 'svelte';
 
 	const tryNavigation = () => {
-		console.log(findPaths({
+		const start = {
 			lat: 42.36797754163142,
 			lon: -71.11484132044114
-		}, {
+		};
+		const end = {
 			lat: 42.362977,
 			lon: -71.127055
-		}, new Date('Wed Mar 13 2024 09:00:00 GMT-0400 (Eastern Daylight Time)').getTime()))
+		};
+		console.log('Navigating from', start, 'to', end);
+		return findPaths(
+			start,
+			end,
+			new Date('Wed Mar 13 2024 09:10:00 GMT-0400 (Eastern Daylight Time)').getTime(),
+			5
+		);
 	};
 	onMount(() => {
-		window.tryNavigation = tryNavigation;
+		const paths = tryNavigation();
+		paths.forEach(path => {
+    	console.log(path, `WALK ${path.walkingTimeToStartStop} MINUTES. GET ON AT ${path.start.stopInfo.stop_name} AT ${new Date(path.busOriginDepartureTime).toLocaleTimeString()}. RIDE ${path.route.route_long_name} TO ${path.end.stopInfo.stop_name}. GET OFF AT ${new Date(path.busDestinationArrivalTime).toLocaleTimeString()}. WALK ${path.walkingTimeFromEndStop} MINUTES. TOTAL TRIP TIME ${path.tripDuration} MINUTES.`);
+  	});
 	})
 	// console.log(routeInfos);
 </script>

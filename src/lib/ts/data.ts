@@ -1,11 +1,7 @@
-// import rawStops from '../data/stops.txt?raw';
-// import rawRoutes from '../data/routes.txt?raw';
-// import rawStopTimes from '../data/stop_times.txt?raw';
-// import rawTrips from '../data/trips.txt?raw';
-// import { convertCsvToArray, convertCsvToObject, getDateObject } from './utils';
-import cachedJson from './cached.json';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import cachedJson from '$lib/data/cached.json';
 
-interface PartialStopInfo {
+export interface PartialStopInfo {
   stop_id: number;
   stop_code: number;
   stop_name: string;
@@ -19,7 +15,7 @@ interface PartialStopInfo {
   platform_code: string;
 };
 
-interface PartialRouteInfo {
+export interface PartialRouteInfo {
   route_id: number;
   agency_id: number;
   route_short_name: string;
@@ -33,7 +29,7 @@ export interface Trip {
   route_id: number;
   service_id: number;
   trip_id: number;
-  trip_headsign: string;
+  trip_headsign: number;
   trip_short_name: string;
   direction_id: number;
   block_id: number;
@@ -54,62 +50,15 @@ export interface StopTime {
   timepoint: number;
 };
 
-// const trips = convertCsvToArray(rawTrips) as Trip[];
-
-// // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// const stopTimes = convertCsvToArray(rawStopTimes).map((item: any) => {
-//   return {
-//     ...item,
-//     arrival_time: getDateObject(item.arrival_time),
-//     departure_time: getDateObject(item.departure_time),
-//     trip: trips.find(trip => trip.trip_id === item.trip_id || trip.trip_headsign === item.trip_headsign)
-//   };
-// }) as StopTime[];
-
 export interface StopInfo extends PartialStopInfo {
   stopTimes: StopTime[];
 }
-
-// export const constructStopInfos = (): Record<number, StopInfo> => {
-//   const stops = convertCsvToObject(rawStops, 'stop_id') as Record<string, PartialStopInfo>;
-//   const infos = Object.keys(stops).map(stopId => {
-//     const stop = stops[stopId];
-//     const stopTimesAtStop = stopTimes.filter(stopTime => stopTime.stop_id === stop.stop_id);
-//     return {
-//       ...stop,
-//       stopTimes: stopTimesAtStop.sort((a, b) => a.arrival_time - b.arrival_time)
-//     };
-//   });
-//   return infos.reduce((acc, stopInfo) => {
-//     acc[stopInfo.stop_id] = stopInfo;
-//     return acc;
-//   }, {} as Record<number, StopInfo>);
-// }
-
-// export const stopInfos = constructStopInfos();
-
 export interface RouteInfo extends PartialRouteInfo {
-  routeStops: StopInfo[];
+  routeStops: Record<number, StopTime[]>;
 }
 
-// const constructRouteInfos = () => {
-//   const routes = convertCsvToObject(rawRoutes, 'route_id') as Record<string, PartialRouteInfo>;
-//   const routeInfos = Object.keys(routes).map(routeId => {
-//     const route = routes[routeId];
-//     const routeStops = Object.values(stopInfos).filter(stopInfo => {
-//       return stopTimes.some(stopTime => {
-//         return stopTime.stop_id === stopInfo.stop_id;
-//       });
-//     });
-//     return {
-//       ...route,
-//       routeStops
-//     };
-//   });
-//   return routeInfos;
-// };
-
-export const routeInfos = cachedJson as unknown as RouteInfo[]; // constructRouteInfos();
+export const routeInfos = (cachedJson as any).routeInfos as RouteInfo[];
+export const stopInfos = (cachedJson as any).stopInfos as Record<number, StopInfo>;
 
 export interface Path {
   route: RouteInfo;

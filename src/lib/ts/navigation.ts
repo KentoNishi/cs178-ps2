@@ -1,15 +1,20 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import getDistance from 'gps-distance';
-import type { RouteInfo, StopInfo } from "./data";
-import { routeInfos } from "./data";
+import type { RouteInfo, StopInfo, StopTime } from "./data";
+import { routeInfos, stopInfos } from "./data";
 import type { GPS } from './types';
 
-const WALKING_SPEED = 3.2;
+const WALKING_SPEED = 3;
+
+interface StopTimeWithMeta {
+  stopTime: StopTime;
+  stopInfo: StopInfo;
+}
 
 interface Path {
-  start: StopInfo;
-  end: StopInfo;
+  start: StopTimeWithMeta;
+  end: StopTimeWithMeta;
   route: RouteInfo;
   busOriginDepartureTime: number;
   busDestinationArrivalTime: number;
@@ -19,6 +24,7 @@ interface Path {
   walkingTimeToStartStop: number;
   walkingTimeFromEndStop: number;
   totalWalkingTime: number;
+  totalRidingTime: number;
 };
 
 const adjustTime = (time: number, currentTime: Date): number => {
@@ -29,7 +35,7 @@ const adjustTime = (time: number, currentTime: Date): number => {
   timeDate.setFullYear(currentTime.getFullYear());
   timeDate.setMonth(currentTime.getMonth());
   timeDate.setDate(currentTime.getDate());
-  if (timeDate < currentTime) {
+  if (timeDate.getTime() < currentTime.getTime()) {
     timeDate.setDate(timeDate.getDate() + 1);
   }
   return timeDate.getTime();
@@ -39,6 +45,7 @@ export const findPaths = (
   origin: GPS,
   destination: GPS,
   currentTime: number,
+  N=5
 ): Path[] => {
   // have a list of Path objects
   // go through all the routes
@@ -51,74 +58,64 @@ export const findPaths = (
   //       append a new Path object to the list of Path objects
   // sort the list of Path objects by tripEndTime
   // return the list of Path objects
-  const fiveBestPaths: Path[] = [];
+  const bestPaths: Path[] = [];
   const currentDate = new Date(currentTime);
   // routeInfos.forEach(route => {
   //   route.routeStops.forEach(startStop => {
   //     route.routeStops.forEach(endStop => {
+  const distanceToDestination = getDistance(origin.lat, origin.lon, destination.lat, destination.lon);
   for (const route of routeInfos) {
-    for (const startStop of route.routeStops) {
-      for (const endStop of route.routeStops) {
-        if (startStop.stop_id === endStop.stop_id) continue;
-        const distanceToStartStop = getDistance(origin.lat, origin.lon, startStop.stop_lat, startStop.stop_lon);
-        const distanceToEndStop = getDistance(origin.lat, origin.lon, endStop.stop_lat, endStop.stop_lon);
-        const distanceToDestination = getDistance(origin.lat, origin.lon, destination.lat, destination.lon);
-        if (distanceToEndStop > distanceToDestination || distanceToStartStop > distanceToDestination) continue;
-        // const startStopTime = startStop.stopTimes.filter(stopTime => {
-        //   return adjustTime(stopTime.arrival_time, currentDate) > currentTime;
-        // }).sort((a, b) => adjustTime(a.arrival_time, currentDate) - adjustTime(b.arrival_time, currentDate))[0];
-        let startStopTime = startStop.stopTimes[startStop.stopTimes.length - 1];
-        for (const stopTime of startStop.stopTimes) {
-          if (
-            adjustTime(stopTime.arrival_time, currentDate) > currentTime &&
-            adjustTime(stopTime.arrival_time, currentDate) < adjustTime(startStopTime.arrival_time, currentDate)
-          ) {
-            startStopTime = stopTime;
-          }
-        }
-        // const endStopTime = endStop.stopTimes.filter(stopTime => {
-        //   return adjustTime(stopTime.arrival_time, currentDate) > adjustTime(startStopTime.departure_time, currentDate);
-        // }).sort((a, b) => adjustTime(a.arrival_time, currentDate) - adjustTime(b.arrival_time, currentDate))[0];
-        let endStopTime = endStop.stopTimes[endStop.stopTimes.length - 1];
-        for (const stopTime of endStop.stopTimes) {
-          if (
-            adjustTime(stopTime.arrival_time, currentDate) > adjustTime(startStopTime.departure_time, currentDate) &&
-            adjustTime(stopTime.arrival_time, currentDate) < adjustTime(endStopTime.departure_time, currentDate)
-          ) {
-            endStopTime = stopTime;
-          }
-        }
-        const distanceFromEndStop = getDistance(destination.lat, destination.lon, endStop.stop_lat, endStop.stop_lon);
+    for (const startStopKey of Object.keys(route.routeStops)) {
+      const startStopInfo = stopInfos[route.routeStops[startStopKey as unknown as number][0].stop_id];
+      const distanceToStartStop = getDistance(origin.lat, origin.lon, startStopInfo.stop_lat, startStopInfo.stop_lon);
+      if (distanceToStartStop > distanceToDestination) continue;
+      for (const endStopKey of Object.keys(route.routeStops)) {
+        // console.log('considering riding from ', startStopInfo.stop_name, ' to ', stopInfos[route.routeStops[endStopKey as unknown as number][0].stop_id].stop_name, ' on route ', route.route_long_name);
+        const endStopInfo = stopInfos[route.routeStops[endStopKey as unknown as number][0].stop_id];
+        if (startStopInfo.stop_id === endStopInfo.stop_id) break;
+        const distanceToEndStop = getDistance(origin.lat, origin.lon, endStopInfo.stop_lat, endStopInfo.stop_lon);
+        if (distanceToEndStop > distanceToDestination) continue;
         const walkingTimeToStartStop = distanceToStartStop / WALKING_SPEED * 60;
+        const currentDateWithWalk = new Date(
+          currentDate.getTime() + walkingTimeToStartStop * 60 * 1000
+        );
+        const startStopTime = startStopInfo.stopTimes.sort((a, b) => adjustTime(a.arrival_time, currentDateWithWalk) - adjustTime(b.arrival_time, currentDateWithWalk))[0];
+        if (!startStopTime) continue;
+        const departureDate = new Date(adjustTime(startStopTime.departure_time, currentDateWithWalk));
+        const endStopTime = endStopInfo.stopTimes.filter(item => {
+          return (
+            item.trip.trip_id === startStopTime.trip.trip_id ||
+            item.trip.trip_headsign === startStopTime.trip.trip_id
+          );
+        }).sort((a, b) => adjustTime(a.arrival_time, departureDate) - adjustTime(b.arrival_time, departureDate))[0];
+        if (!endStopTime) continue;
+        const distanceFromEndStop = getDistance(destination.lat, destination.lon, endStopInfo.stop_lat, endStopInfo.stop_lon);
         const walkingTimeFromEndStop = distanceFromEndStop / WALKING_SPEED * 60;
-        const tripStartTime = new Date(Math.min(currentTime, adjustTime(startStopTime.departure_time, currentDate) - walkingTimeToStartStop * 60 * 1000)).getTime();
-        const tripEndTime = new Date(adjustTime(endStopTime.arrival_time, currentDate) + walkingTimeFromEndStop * 60 * 1000).getTime();
+        const tripStartTime = new Date(adjustTime(startStopTime.departure_time, currentDateWithWalk) - walkingTimeToStartStop * 60 * 1000).getTime();
+        const tripEndTime = new Date(adjustTime(endStopTime.arrival_time, departureDate) + walkingTimeFromEndStop * 60 * 1000).getTime();
+        const busOriginDepartureTime = adjustTime(startStopTime.departure_time, currentDate);
+        const busDestinationArrivalTime = adjustTime(endStopTime.arrival_time, departureDate);
         const path: Path = {
-          start: startStop,
-          end: endStop,
+          start: { stopTime: startStopTime, stopInfo: startStopInfo },
+          end: { stopTime: endStopTime, stopInfo: endStopInfo },
           route,
-          busOriginDepartureTime: adjustTime(startStopTime.departure_time, currentDate),
-          busDestinationArrivalTime: adjustTime(endStopTime.arrival_time, currentDate),
+          busOriginDepartureTime,
+          busDestinationArrivalTime,
           tripStartTime,
           tripEndTime,
           walkingTimeToStartStop,
           walkingTimeFromEndStop,
           tripDuration: (tripEndTime - tripStartTime) / 1000 / 60,
           totalWalkingTime: walkingTimeToStartStop + walkingTimeFromEndStop,
+          totalRidingTime: busDestinationArrivalTime - busOriginDepartureTime
         };
-        // only add the path if the trip duration is less than any of the trip durations of the five best paths
-        if (fiveBestPaths.length < 5 || path.tripEndTime < fiveBestPaths[fiveBestPaths.length - 1].tripEndTime) {
-          fiveBestPaths.push(path);
-          fiveBestPaths.sort((a, b) => a.tripEndTime - b.tripEndTime);
-          if (fiveBestPaths.length > 5) fiveBestPaths.pop();
+        if (bestPaths.length < N || path.tripDuration < bestPaths[bestPaths.length - 1].tripDuration) {
+          bestPaths.push(path);
+          bestPaths.sort((a, b) => a.tripDuration - b.tripDuration);
+          if (bestPaths.length > N) bestPaths.pop();
         }
       }
     }
   }
-  return fiveBestPaths.sort((a, b) => {
-    if (a.tripEndTime === b.tripEndTime) {
-      return a.tripDuration - b.tripDuration;
-    }
-    return a.tripEndTime - b.tripEndTime;
-  });
+  return bestPaths;
 };
