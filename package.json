@@ -43,6 +43,7 @@
 		"@smui/textfield": "^7.0.0-beta.16",
 		"convert-csv-to-json": "^2.31.0",
 		"gps-distance": "^0.0.4",
+		"km-to-mi": "^1.0.0",
 		"smui-theme": "^7.0.0-beta.16"
 	}
 }

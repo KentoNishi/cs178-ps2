@@ -1,8 +1,19 @@
 <script lang="ts">
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	import getDistance from 'gps-distance';
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	import kmToMi from 'km-to-mi';
 	import RouteEntry from './RouteEntry.svelte';
-	import { getPaths } from '$lib/ts/navigation';
+	import { getPaths, timeToWalk } from '$lib/ts/navigation';
 	import { onMount } from 'svelte';
 	import type { TickWithPosition } from '$lib/ts/types';
+
+	let walkOption: {
+		walkingTime: number,
+		distance: number
+	} | null = null;
 
 	const tryNavigation = async () => {
 		const start = {
@@ -20,6 +31,10 @@
 			end,
 			date.getTime()
 		);
+		walkOption = {
+			walkingTime: timeToWalk(start, end),
+			distance: kmToMi(getDistance(start.lat, start.lon, end.lat, end.lon))
+		};
 		return foundPaths;
 	};
 	let displayedResults: ({
@@ -55,7 +70,6 @@
 				latestTripEnd
 			);
 		});
-		console.log(earliestTripStart);
 		displayedResults = paths.map(path => ({
 			ticks: [{
 				...path.start.stopInfo,
@@ -73,11 +87,16 @@
 </script>
 
 <div class="outer-wrapper">
-	<div style="font-size: 1.5rem; font-weight: bold; padding-bottom: 8px;">
-		Shuttle Options
-	</div>
 	<div class="container">
+		{#if walkOption}
+			<div class="walk-time">
+				{Math.round(walkOption.walkingTime)} min. walk ({Math.round(walkOption.distance * 100) / 100}mi)
+			</div>
+		{/if}
 		<div class="line" />
+		{#if displayedResults.length == 0}
+			<div style="margin-top: 10px; font-size: 0.9rem;">No Shuttles Found</div>
+		{/if}
 		{#each displayedResults as entry}
 			<RouteEntry {...entry} />
 			<div class="line" />
@@ -101,5 +120,13 @@
 		--container-width: calc(100%);
 		width: var(--container-width);
 		margin-left: calc((100% - var(--container-width)) / 2);
+		user-select: none;
+	}
+	.walk-time {
+		margin-bottom: 10px;
+		background-color: #4a4a4a;
+		padding: 5px 7.5px 5px 7.5px;
+		border-radius: 200px;
+		font-size: 0.8rem;
 	}
 </style>

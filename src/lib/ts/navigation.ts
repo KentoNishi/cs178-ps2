@@ -5,7 +5,7 @@ import type { RouteInfo, StopInfo, StopTime } from "./data";
 import { routeInfos, stopInfos } from "./data";
 import type { GPS, TripUpdates, VehiclePositions } from './types';
 
-const WALKING_SPEED = 4;
+const WALKING_SPEED = 3.2;
 
 interface StopTimeWithMeta {
   stopTime: StopTime;
@@ -106,7 +106,7 @@ export const findPaths = (
   //   route.routeStops.forEach(startStop => {
   //     route.routeStops.forEach(endStop => {
   const distanceToDestination = getDistance(origin.lat, origin.lon, destination.lat, destination.lon);
-  const walkingTime = timeToWalk(origin, destination);
+  // const walkingTime = timeToWalk(origin, destination);
   for (const route of routeInfos) {
     // for (const startStopKey of Object.keys(route.routeStops)) {
     let startStopKey = -1;
@@ -195,7 +195,7 @@ export const findPaths = (
     // }
   }
   return bestPaths.filter(item => {
-    return item.tripEndTime > currentTime && item.tripEndTime < currentTime + 2 * 60 * 60 * 1000;
+    return item.tripEndTime > currentTime && item.tripEndTime < currentTime + 1.5 * 60 * 60 * 1000;
   });
 };
 

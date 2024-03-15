@@ -148,7 +148,7 @@
 
 	.stop-label {
 		font-size: 0.7rem;
-		max-width: 50px;
+		width: 100px;
 		text-align: center;
 		position: absolute;
 		transform: translateY(-25px);
@@ -170,13 +170,14 @@
 	}
 
 	.bus-icon {
-		filter: invert(0.9) brightness(0.9);
+		filter: invert(1) brightness(1);
 		width: 40px;
 		height: 40px;
 		font-size: 40px;
 	}
 	.bus-icon-wrapper {
 		background-color: var(--dark-bg);
+		opacity: 0.7;
 		position: absolute;
 		user-select: none;
 		transform: translate(-50%, calc(-3px - 50%));
@@ -185,5 +186,6 @@
 		justify-content: center;
 		align-items: center;
 		overflow: hidden;
+		z-index: 10000;
 	}
 </style>
