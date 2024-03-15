@@ -303,6 +303,23 @@
     "@material/feature-targeting" "^14.0.0"
     "@material/rtl" "^14.0.0"
 
+"@material/icon-button@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@material/icon-button/-/icon-button-14.0.0.tgz#cdfc7e7b967abe81d537fd7db916c9113c3a09b7"
+  integrity sha512-wHMqzm7Q/UwbWLoWv32Li1r2iVYxadIrwTNxT0+p+7NdfI3lEwMN3NoB0CvoJnHTljjXDzce0KJ3nZloa0P0gA==
+  dependencies:
+    "@material/base" "^14.0.0"
+    "@material/density" "^14.0.0"
+    "@material/dom" "^14.0.0"
+    "@material/elevation" "^14.0.0"
+    "@material/feature-targeting" "^14.0.0"
+    "@material/focus-ring" "^14.0.0"
+    "@material/ripple" "^14.0.0"
+    "@material/rtl" "^14.0.0"
+    "@material/theme" "^14.0.0"
+    "@material/touch-target" "^14.0.0"
+    tslib "^2.1.0"
+
 "@material/line-ripple@^14.0.0":
   version "14.0.0"
   resolved "https://registry.npmjs.org/@material/line-ripple/-/line-ripple-14.0.0.tgz"
@@ -527,6 +544,14 @@
     "@material/dom" "^14.0.0"
     svelte2tsx "^0.6.27"
 
+"@smui/common@^7.0.0-beta.17":
+  version "7.0.0-beta.17"
+  resolved "https://registry.yarnpkg.com/@smui/common/-/common-7.0.0-beta.17.tgz#84521033875df1018b6248253053b0cb75c3967d"
+  integrity sha512-nxipXxt9nn/hQK6phvxfv5nX6E8ZmsSiNGtlzPoMBlQz57rhFhHV0nDQOnnYALpuvkeCGOAhWjSQnGs7dGTotQ==
+  dependencies:
+    "@material/dom" "^14.0.0"
+    svelte2tsx "^0.6.27"
+
 "@smui/floating-label@^7.0.0-beta.16":
   version "7.0.0-beta.16"
   resolved "https://registry.npmjs.org/@smui/floating-label/-/floating-label-7.0.0-beta.16.tgz"
@@ -534,6 +559,17 @@
   dependencies:
     "@material/floating-label" "^14.0.0"
     "@smui/common" "^7.0.0-beta.16"
+    svelte2tsx "^0.6.27"
+
+"@smui/icon-button@^7.0.0-beta.17":
+  version "7.0.0-beta.17"
+  resolved "https://registry.yarnpkg.com/@smui/icon-button/-/icon-button-7.0.0-beta.17.tgz#4c4e58708cbb1c05714f9b9c4d209dee29eeb10a"
+  integrity sha512-ZqBSlMz97IWi2WDNES04aVm0DEcGP9OvmxOKLalZfL/qGgelJJsA7T7chhwiUTq2OW0CvB16bId59JNDwDoKHA==
+  dependencies:
+    "@material/density" "^14.0.0"
+    "@material/icon-button" "^14.0.0"
+    "@smui/common" "^7.0.0-beta.17"
+    "@smui/ripple" "^7.0.0-beta.17"
     svelte2tsx "^0.6.27"
 
 "@smui/line-ripple@^7.0.0-beta.16":
@@ -563,6 +599,16 @@
     "@material/dom" "^14.0.0"
     "@material/ripple" "^14.0.0"
     "@smui/common" "^7.0.0-beta.16"
+    svelte2tsx "^0.6.27"
+
+"@smui/ripple@^7.0.0-beta.17":
+  version "7.0.0-beta.17"
+  resolved "https://registry.yarnpkg.com/@smui/ripple/-/ripple-7.0.0-beta.17.tgz#231dc522adcb672dd4f45a12792f20563643ec3f"
+  integrity sha512-OrUxhF7p9QaiXE4zyfm1tLOWtf7gj6RabwResG5pBB7zh/Ohtq5o11pEFNugANDCz1NmQ6uWhlteB/W6lKcqmg==
+  dependencies:
+    "@material/dom" "^14.0.0"
+    "@material/ripple" "^14.0.0"
+    "@smui/common" "^7.0.0-beta.17"
     svelte2tsx "^0.6.27"
 
 "@smui/textfield@^7.0.0-beta.16":

@@ -19,8 +19,16 @@
 	};
 
 	const getEstimate = (tick: TickWithPosition, index: number) => {
-		if (index == 0) return `${formatDate(tick.uncertainty.departureLowEnd)}–${formatDate(tick.uncertainty.departureHighEnd)}`;
-		return `${formatDate(tick.uncertainty.arrivalLowEnd)}–${formatDate(tick.uncertainty.arrivalHighEnd)}`;
+		if (index == 0) {
+			const f1 = formatDate(tick.uncertainty.departureLowEnd);
+			const f2 = formatDate(tick.uncertainty.departureHighEnd);
+			if (f1 == f2) return f1;
+			return `${f1}–${f2}`;
+		}
+		const f1 = formatDate(tick.uncertainty.arrivalLowEnd);
+		const f2 = formatDate(tick.uncertainty.arrivalHighEnd);
+		if (f1 == f2) return f1;
+		return `${f1}–${f2}`;
 	};
 
 	const getETA = (uncertainty: TickWithPosition['uncertainty']) => {
@@ -33,7 +41,7 @@
 		const depLowMinutes = Math.floor(depLowDiff / 60000);
 		const depHighMinutes = Math.floor(depHighDiff / 60000);
 		if (depLowMinutes != depHighMinutes) return `in ${depLowMinutes}–${depHighMinutes} minutes`;
-		return `in ${depLowMinutes}–${depHighMinutes} minutes`;
+		return `in ${depHighMinutes} minutes`;
 	};
 </script>
 
@@ -148,7 +156,7 @@
 
 	.stop-label {
 		font-size: 0.7rem;
-		width: 100px;
+		width: 50px;
 		text-align: center;
 		position: absolute;
 		transform: translateY(-25px);

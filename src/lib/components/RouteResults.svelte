@@ -7,23 +7,22 @@
 	import kmToMi from 'km-to-mi';
 	import RouteEntry from './RouteEntry.svelte';
 	import { getPaths, timeToWalk } from '$lib/ts/navigation';
-	import { onMount } from 'svelte';
-	import type { TickWithPosition } from '$lib/ts/types';
+	import type { GPS, TickWithPosition } from '$lib/ts/types';
 
 	let walkOption: {
 		walkingTime: number,
 		distance: number
 	} | null = null;
 
-	const tryNavigation = async () => {
-		const start = {
-			lat: 42.368761836300095, 
-			lon: -71.11521053159292
-		};
-		const end = {
-			lat: 42.36348667132956,
-			lon: -71.12602311114634
-		};
+	const getResults = async (start: GPS, end: GPS) => {
+		// const start = {
+		// 	lat: 42.368761836300095, 
+		// 	lon: -71.11521053159292
+		// };
+		// const end = {
+		// 	lat: 42.36348667132956,
+		// 	lon: -71.12602311114634
+		// };
 		const date = new Date(); // new Date('Wed Mar 13 2024 9:00:00 GMT-0400 (Eastern Daylight Time)');
 		console.log('Navigating from', start, '(Mather) to', end, '(SEC) at', date);
 		const foundPaths = await getPaths(
@@ -42,8 +41,9 @@
 		busLocation: number,
 		busName: string
 	})[] = [];
-	onMount(async () => {
-		const paths = await tryNavigation();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	export const navigate = async (details: any) => {
+		const paths = await getResults(details.detail.originLocation, details.detail.destinationLocation);
 		paths.forEach(path => {
 			console.log(path, `walk ${path.walkingTimeToStartStop} minutes. get on at ${path.start.stopInfo.stop_name} between ${
 				new Date(path.uncertainty.departureLowEnd).toLocaleTimeString()
@@ -61,7 +61,10 @@
 			earliestTripStart = Math.min(
 				// path.tripStartTime - path.walkingTimeToStartStop,
 				// path.tripStartTime,
-				(Date.now() - Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now())),
+				Math.max(
+					path.uncertainty.departureLowEnd - 20 * 60 * 1000,
+					(Date.now() - Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now()))
+				),
 				earliestTripStart,
 			);
 			latestTripEnd = Math.max(
@@ -80,10 +83,11 @@
 				position: (path.uncertainty.arrivalHighEnd - earliestTripStart) / (latestTripEnd - earliestTripStart),
 				uncertainty: path.uncertainty
 			}],
-			busLocation: ((Date.now() - Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now())) - earliestTripStart) / (latestTripEnd - earliestTripStart),
+			busLocation: (
+				(Date.now() - Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now())) - earliestTripStart) / (latestTripEnd - earliestTripStart),
 			busName: path.route.route_long_name
 		}));
-	});
+	};
 </script>
 
 <div class="outer-wrapper">
@@ -92,15 +96,17 @@
 			<div class="walk-time">
 				{Math.round(walkOption.walkingTime)} min. walk ({Math.round(walkOption.distance * 100) / 100}mi)
 			</div>
-		{/if}
-		<div class="line" />
-		{#if displayedResults.length == 0}
-			<div style="margin-top: 10px; font-size: 0.9rem;">No Shuttles Found</div>
-		{/if}
-		{#each displayedResults as entry}
-			<RouteEntry {...entry} />
 			<div class="line" />
-		{/each}
+			{#if displayedResults.length == 0}
+				<div style="margin-top: 10px; font-size: 0.9rem;">No Shuttles Found</div>
+			{/if}
+			{#each displayedResults as entry}
+				<RouteEntry {...entry} />
+				<div class="line" />
+			{/each}
+		{:else}
+			<div class="line" />
+		{/if}
 	</div>
 </div>
 
