@@ -62,14 +62,17 @@
 				// path.tripStartTime - path.walkingTimeToStartStop,
 				// path.tripStartTime,
 				Math.max(
-					path.uncertainty.departureLowEnd - 20 * 60 * 1000,
+					path.uncertainty.departureLowEnd - 30 * 60 * 1000,
 					(Date.now() - Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now()))
 				),
 				earliestTripStart,
 			);
 			latestTripEnd = Math.max(
 				// path.tripEndTime,
-				path.busDestinationArrivalTime,
+				Math.min(
+					path.busDestinationArrivalTime,
+					(Date.now() + 30 * 60 * 1000)
+				),
 				latestTripEnd
 			);
 		});
