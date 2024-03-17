@@ -2,20 +2,25 @@
 	import type { TickWithPosition } from '$lib/ts/types';
 	import Ripple from '@smui/ripple';
 	import busImg from '../assets/bus.svg';
+	import RouteDetail from './RouteDetail.svelte';
 
 	export let ticks: TickWithPosition[];
 	export let busLocation = 0;
 	export let busName = '';
 
+	let isShow = false;
+
 	const formatDate = (date: number) => {
 		const d = new Date(date);
 		// hour:minute, 12 hour, no zeros, no am/pm, no seconds
-		return d.toLocaleTimeString('en-US', {
-			hour: 'numeric',
-			minute: 'numeric',
-			hour12: true,
-			hourCycle: 'h23',
-		}).slice(0, -3);
+		return d
+			.toLocaleTimeString('en-US', {
+				hour: 'numeric',
+				minute: 'numeric',
+				hour12: true,
+				hourCycle: 'h23'
+			})
+			.slice(0, -3);
 	};
 
 	const getEstimate = (tick: TickWithPosition, index: number) => {
@@ -43,35 +48,49 @@
 		if (depLowMinutes != depHighMinutes) return `in ${depLowMinutes}–${depHighMinutes} minutes`;
 		return `in ${depHighMinutes} minutes`;
 	};
+
+	function toggleFullscreen() {
+		isShow = !isShow;
+	}
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
 	class="card"
 	use:Ripple={{ surface: true, color: 'secondary' }}
 	tabindex="0"
-	role="button">
-	<div class="container">
-		<div class="bus-name">{busName}</div>
-		<div class="bus-desc">{getETA(ticks[0].uncertainty)}</div>
-		<!-- Horizontal Route Line -->
-		<div class="route"></div>
-		{#each ticks as tick, index}
-			<div class="stop" style="left: calc(5% + {90 * tick.position}%);">
-				<div class="stop-circle" />
-				<span class="time-label">{getEstimate(tick, index)}</span>
-				<span class="stop-label">{tick.stop_name}</span>
-			</div>
-		{/each}
-		<div class="orange-bar" style="
+	role="button"
+	on:click={toggleFullscreen}
+>
+	{#if isShow}
+		<RouteDetail {ticks} {busLocation} {busName} />
+	{:else}
+		<div class="container">
+			<div class="bus-name">{busName}</div>
+			<div class="bus-desc">{getETA(ticks[0].uncertainty)}</div>
+			<!-- Horizontal Route Line -->
+			<div class="route"></div>
+			{#each ticks as tick, index}
+				<div class="stop" style="left: calc(5% + {90 * tick.position}%);">
+					<div class="stop-circle" />
+					<span class="time-label">{getEstimate(tick, index)}</span>
+					<span class="stop-label">{tick.stop_name}</span>
+				</div>
+			{/each}
+			<div
+				class="orange-bar"
+				style="
 			left: calc(5% + {90 * ticks[0].position}%);
 			width: calc({90 * (ticks[ticks.length - 1].position - ticks[0].position)}%);
-		">
-			<div class="right-arrow" />
+		"
+			>
+				<div class="right-arrow" />
+			</div>
+			<div class="bus-icon-wrapper" style="left: calc(5% + {90 * busLocation}%);">
+				<img src={busImg} alt="bus" class="bus-icon" />
+			</div>
 		</div>
-		<div class="bus-icon-wrapper" style="left: calc(5% + {90 * busLocation}%);">
-			<img src={busImg} alt="bus" class="bus-icon" />
-		</div>
-	</div>
+	{/if}
 </div>
 
 <style>
@@ -81,8 +100,8 @@
 		position: absolute;
 		transform: translateY(-100%);
 		display: flex;
-    justify-content: center;
-    align-items: center;
+		justify-content: center;
+		align-items: center;
 	}
 	.right-arrow {
 		width: 0;
@@ -96,6 +115,7 @@
 	.card {
 		padding-top: calc(78px + 10px);
 		width: calc(100%);
+		height: auto;
 		display: flex;
 		justify-content: center;
 		padding-bottom: 36px;
@@ -162,9 +182,9 @@
 		transform: translateY(-25px);
 		color: rgb(212, 212, 212);
 		height: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
+		display: flex;
+		justify-content: center;
+		align-items: flex-end;
 		z-index: 1000;
 	}
 
