@@ -176,7 +176,7 @@
 
 	.stop-label {
 		font-size: 0.7rem;
-		width: 50px;
+		width: 60px;
 		text-align: center;
 		position: absolute;
 		transform: translateY(-25px);

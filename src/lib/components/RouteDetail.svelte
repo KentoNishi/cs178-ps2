@@ -97,7 +97,7 @@
 
 	.route {
 		position: absolute;
-		left: 20%;
+		left: 10%;
 		top: 5%;
 		height: 90%;
 		width: 5px;
@@ -108,7 +108,7 @@
 
 	.orange-bar {
 		position: absolute;
-		left: 20%;
+		left: 10%;
 		transform: translateX(-50%);
 		width: 5px;
 		background-color: #ff3e00;
@@ -120,7 +120,7 @@
 
 	.stop {
 		position: absolute;
-		left: 20%;
+		left: 10%;
 		transform: translate(-50%, -50%);
 		display: flex;
 		flex-direction: column;
@@ -164,9 +164,9 @@
 		background-color: var(--dark-bg);
 		opacity: 0.7;
 		position: absolute;
-		left: 20%;
+		left: 10%;
 		user-select: none;
-		transform: translate(-150%, calc(-3px - 50%));
+		transform: translate(-60%, calc(3px - 50%));
 		width: 24px;
 		display: flex;
 		justify-content: center;
@@ -180,8 +180,7 @@
 		width: 40px;
 		height: 40px;
 		font-size: 40px;
-		transform: scaleX(-1) rotate(90deg);
-		-webkit-transform: scaleX(-1) rotate(90deg);
+		transform: rotate(90deg);
 	}
 
 	.container {
