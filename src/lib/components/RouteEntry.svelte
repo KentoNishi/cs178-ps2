@@ -60,25 +60,41 @@
 	{:else}
 		<div class="container">
 			<div class="bus-name">{busName}</div>
-			<div class="bus-desc">{getETA(ticks[0].uncertainty)}</div>
+			<div class="bus-desc">{getETA(ticks[1].uncertainty)}</div>
 			<!-- Horizontal Route Line -->
 			<div class="route"></div>
+			<div
+				class="green-bar bar left-round"
+				style="
+					left: calc(5% + {90 * ticks[0].position}%);
+					width: calc({90 * (ticks[1].position - ticks[0].position)}%);
+				"
+			/>
 			{#each ticks as tick, index}
-				<div class="stop" style="left: calc(5% + {90 * tick.position}%);">
-					<div class="stop-circle" />
-					<span class="time-label">{getEstimate(tick, index)}</span>
-					<span class="stop-label">{tick.stop_name}</span>
-				</div>
+				{#if [1, 2].includes(index)}
+					<div class="stop" style="left: calc(5% + {90 * tick.position}%);">
+						<div class="stop-circle" />
+						<span class="time-label">{getEstimate(tick, index)}</span>
+						<span class="stop-label">{tick.stop_name}</span>
+					</div>
+				{/if}
 			{/each}
 			<div
-				class="orange-bar"
+				class="orange-bar bar"
 				style="
-			left: calc(5% + {90 * ticks[0].position}%);
-			width: calc({90 * (ticks[ticks.length - 1].position - ticks[0].position)}%);
+			left: calc(5% + {90 * ticks[1].position}%);
+			width: calc({90 * (ticks[2].position - ticks[1].position)}%);
 		"
 			>
 				<div class="right-arrow" />
 			</div>
+			<div
+				class="green-bar bar right-round"
+				style="
+					left: calc(5% + {90 * ticks[ticks.length - 2].position}%);
+					width: calc({90 * (ticks[ticks.length - 1].position - ticks[ticks.length - 2].position)}%);
+				"
+			/>
 			<div class="bus-icon-wrapper" style="left: calc(5% + {90 * busLocation}%);">
 				<img src={busImg} alt="bus" class="bus-icon" />
 			</div>
@@ -87,14 +103,27 @@
 </div>
 
 <style>
-	.orange-bar {
-		background-color: #ff3e00;
+	.bar {
 		height: 5px;
 		position: absolute;
 		transform: translateY(-100%);
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+	.left-round {
+		border-top-left-radius: 10px;
+		border-bottom-left-radius: 10px;
+	}
+	.right-round {
+		border-top-right-radius: 10px;
+		border-bottom-right-radius: 10px;
+	}
+	.orange-bar {
+		background-color: #ff3e00;
+	}
+	.green-bar {
+		background-color: var(--passio-green);
 	}
 	.right-arrow {
 		width: 0;

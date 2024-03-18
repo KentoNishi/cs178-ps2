@@ -46,7 +46,7 @@
 <div class="full-screen">
 	<div class="container">
 		<div class="bus-name">{busName}</div>
-		<div class="bus-desc">{getETA(ticks[0].uncertainty)}</div>
+		<div class="bus-desc">{getETA(ticks[1].uncertainty)}</div>
 		<div class="trip-details">Walking Time</div>
 		<!-- <div class="walk-time">Walk: {walkTime.toFixed(2)} min</div> -->
 		<div class="walk-time">
@@ -57,25 +57,41 @@
 		<div class="total-time">ETA: {time}</div>
 		<!-- Vertical Route Line -->
 		<div class="route"></div>
+		<div
+			class="green-bar bar top-round"
+			style="
+				top: calc(5% + {90 * ticks[0].position}%);
+				height: calc({90 * (ticks[1].position - ticks[0].position)}%);
+			"
+		/>
 		{#each ticks as tick, index}
-			<div class="stop" style="top: calc(5% + {90 * tick.position}%);">
-				<div class="stop-circle"></div>
-				<div class="stop-label-container">
-					<span class="stop-label">{tick.stop_name}</span><span class="time-label"
-						>{getEstimate(tick, index)}</span
-					>
+			{#if [1, 2].includes(index)}
+				<div class="stop" style="top: calc(5% + {90 * tick.position}%);">
+					<div class="stop-circle"></div>
+					<div class="stop-label-container">
+						<span class="stop-label">{tick.stop_name}</span><span class="time-label"
+							>{getEstimate(tick, index)}</span
+						>
+					</div>
 				</div>
-			</div>
+			{/if}
 		{/each}
 		<div
-			class="orange-bar"
+			class="bar orange-bar"
 			style="
-            top: calc(5% + {90 * ticks[0].position}%);
-            height: calc({90 * (ticks[ticks.length - 1].position - ticks[0].position)}%);
+            top: calc(5% + {90 * ticks[1].position}%);
+            height: calc({90 * (ticks[2].position - ticks[1].position)}%);
         "
 		>
 			<div class="down-arrow" />
 		</div>
+		<div
+			class="green-bar bar bottom-round"
+			style="
+				top: calc(5% + {90 * ticks[ticks.length - 2].position}%);
+				height: calc({90 * (ticks[ticks.length - 1].position - ticks[ticks.length - 2].position)}%);
+			"
+		/>
 		<div class="bus-icon-wrapper" style="top: calc(5% + {90 * busLocation}%);">
 			<img src={busImg} alt="bus" class="bus-icon" />
 		</div>
@@ -131,14 +147,27 @@
 		transform: translateX(-50%);
 		border-radius: 2.5px;
 	}
-
+	.top-round {
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+	}
+	.bottom-round {
+		border-bottom-left-radius: 10px;
+		border-bottom-right-radius: 10px;
+	}
 	.orange-bar {
+		background-color: #ff3e00;
+		border-radius: 2.5px;
+	}
+	.green-bar {
+		background-color: var(--passio-green);
+	}
+
+	.bar {
 		position: absolute;
 		left: 10%;
 		transform: translateX(-50%);
 		width: 5px;
-		background-color: #ff3e00;
-		border-radius: 2.5px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -161,7 +190,7 @@
 		width: var(--inner-size);
 		height: var(--inner-size);
 		background-color: white;
-		border: 4px solid crimson;
+		border: var(--border-size) solid rgb(132, 132, 132);
 		border-radius: 50%;
 		z-index: 9000;
 	}
