@@ -6,13 +6,18 @@
 	// @ts-ignore
 	import kmToMi from 'km-to-mi';
 	import RouteEntry from './RouteEntry.svelte';
-	import { getPaths, timeToWalk } from '$lib/ts/navigation';
+	import { augmentRealtimeUncertainty, findPaths, getPaths, timeToWalk } from '$lib/ts/navigation';
 	import type { GPS, TickWithPosition } from '$lib/ts/types';
+	import Page from '../../routes/+page.svelte';
 
 	let walkOption: {
 		walkingTime: number;
 		distance: number;
 	} | null = null;
+
+	let loading = false;
+
+	let refreshInterval: number | null = null;
 
 	const getResults = async (start: GPS, end: GPS) => {
 		// const start = {
@@ -25,7 +30,7 @@
 		// };
 		const date = new Date(); // new Date('Wed Mar 13 2024 9:00:00 GMT-0400 (Eastern Daylight Time)');
 		console.log('Navigating from', start, '(Mather) to', end, '(SEC) at', date);
-		const foundPaths = await getPaths(start, end, date.getTime());
+		const foundPaths = await findPaths(start, end, date.getTime());
 		walkOption = {
 			walkingTime: timeToWalk(start, end),
 			distance: kmToMi(getDistance(start.lat, start.lon, end.lat, end.lon))
@@ -40,97 +45,116 @@
 	}[] = [];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	export const navigate = async (details: any) => {
-		const paths = await getResults(
+		clearInterval(refreshInterval as number);
+		displayedResults = [];
+		loading = true;
+		const unaugmentedPaths = await getResults(
 			details.detail.originLocation,
 			details.detail.destinationLocation
 		);
-		paths.forEach((path) => {
-			console.log(
-				path,
-				`walk ${path.walkingTimeToStartStop} minutes. get on at ${path.start.stopInfo.stop_name} between ${new Date(
-					path.uncertainty.departureLowEnd
-				).toLocaleTimeString()} and ${new Date(
-					path.uncertainty.departureHighEnd
-				).toLocaleTimeString()}. ride ${path.route.route_long_name} to ${path.end.stopInfo.stop_name}. get off between ${new Date(
-					path.uncertainty.arrivalLowEnd
-				).toLocaleTimeString()} and ${new Date(
-					path.uncertainty.arrivalHighEnd
-				).toLocaleTimeString()}. walk ${path.walkingTimeFromEndStop} minutes. total time ${path.tripDuration} minutes.`
-			);
-		});
-		let earliestTripStart = Infinity;
-		let latestTripEnd = -Infinity;
-		let minShuttleTimeDistance = 0;
-		paths.forEach((path) => {
-			earliestTripStart = Math.min(
-				// path.tripStartTime - path.walkingTimeToStartStop,
-				// path.tripStartTime,
-				// Math.max(
-				// 	path.uncertainty.departureLowEnd, // - 30 * 60 * 1000,
-				// 	Date.now() - Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now())
-				// ),
-				path.uncertainty.departureLowEnd - path.walkingTimeToStartStop * 60 * 1000,
-				earliestTripStart
-			);
-			latestTripEnd = Math.max(
-				// path.tripEndTime,
-				path.uncertainty.arrivalHighEnd + path.walkingTimeFromEndStop * 60 * 1000,
-				latestTripEnd
-			);
-			minShuttleTimeDistance = Math.max(
-				Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now()),
-				minShuttleTimeDistance
-			);
-		});
-		earliestTripStart = Math.min(earliestTripStart, Date.now() - minShuttleTimeDistance);
-		displayedResults = paths.map((path) => ({
-			ticks: [
-				{
-					position:
-						(path.uncertainty.departureLowEnd -
-							earliestTripStart -
-							path.walkingTimeToStartStop * 60 * 1000) /
-						(latestTripEnd - earliestTripStart),
-					...path.start.stopInfo,
-					uncertainty: path.uncertainty
-				},
-				{
-					...path.start.stopInfo,
-					position:
-						(path.uncertainty.departureLowEnd - earliestTripStart) /
-						(latestTripEnd - earliestTripStart),
-					uncertainty: path.uncertainty
-				},
-				{
-					...path.end.stopInfo,
-					position:
-						(path.uncertainty.arrivalHighEnd - earliestTripStart) /
-						(latestTripEnd - earliestTripStart),
+		const callback = async () => {
+			const paths = await getPaths(unaugmentedPaths);
+			paths.forEach((path) => {
+				console.log(
+					path,
+					`walk ${path.walkingTimeToStartStop} minutes. get on at ${path.start.stopInfo.stop_name} between ${new Date(
+						path.uncertainty.departureLowEnd
+					).toLocaleTimeString()} and ${new Date(
+						path.uncertainty.departureHighEnd
+					).toLocaleTimeString()}. ride ${path.route.route_long_name} to ${path.end.stopInfo.stop_name}. get off between ${new Date(
+						path.uncertainty.arrivalLowEnd
+					).toLocaleTimeString()} and ${new Date(
+						path.uncertainty.arrivalHighEnd
+					).toLocaleTimeString()}. walk ${path.walkingTimeFromEndStop} minutes. total time ${path.tripDuration} minutes.`
+				);
+			});
+			let earliestTripStart = Infinity;
+			let latestTripEnd = -Infinity;
+			let minShuttleTimeDistance = 0;
+			paths.forEach((path) => {
+				earliestTripStart = Math.min(
+					// path.tripStartTime - path.walkingTimeToStartStop,
+					// path.tripStartTime,
+					// Math.max(
+					// 	path.uncertainty.departureLowEnd, // - 30 * 60 * 1000,
+					// 	Date.now() - Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now())
+					// ),
+					path.uncertainty.departureLowEnd - path.walkingTimeToStartStop * 60 * 1000,
+					earliestTripStart
+				);
+				latestTripEnd = Math.max(
+					// path.tripEndTime,
+					path.uncertainty.arrivalHighEnd + path.walkingTimeFromEndStop * 60 * 1000,
+					latestTripEnd
+				);
+				minShuttleTimeDistance = Math.max(
+					Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now()),
+					minShuttleTimeDistance
+				);
+			});
+			earliestTripStart = Math.min(earliestTripStart, Date.now() - minShuttleTimeDistance);
+			const updatedDisplayedResults = paths.map((path) => ({
+				ticks: [
+					{
+						position:
+							(path.uncertainty.departureLowEnd -
+								earliestTripStart -
+								path.walkingTimeToStartStop * 60 * 1000) /
+							(latestTripEnd - earliestTripStart),
+						...path.start.stopInfo,
+						uncertainty: path.uncertainty
+					},
+					{
+						...path.start.stopInfo,
+						position:
+							(path.uncertainty.departureLowEnd - earliestTripStart) /
+							(latestTripEnd - earliestTripStart),
+						uncertainty: path.uncertainty
+					},
+					{
+						...path.end.stopInfo,
+						position:
+							(path.uncertainty.arrivalHighEnd - earliestTripStart) /
+							(latestTripEnd - earliestTripStart),
 
-					uncertainty: path.uncertainty
-				},
-				{
-					...path.end.stopInfo,
-					position:
-						(path.uncertainty.arrivalHighEnd +
-							path.walkingTimeFromEndStop * 60 * 1000 -
-							earliestTripStart) /
-						(latestTripEnd - earliestTripStart),
-					uncertainty: path.uncertainty
+						uncertainty: path.uncertainty
+					},
+					{
+						...path.end.stopInfo,
+						position:
+							(path.uncertainty.arrivalHighEnd +
+								path.walkingTimeFromEndStop * 60 * 1000 -
+								earliestTripStart) /
+							(latestTripEnd - earliestTripStart),
+						uncertainty: path.uncertainty
+					}
+				],
+				busLocation:
+					(Date.now() -
+						Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now()) -
+						earliestTripStart) /
+					(latestTripEnd - earliestTripStart),
+				busName: path.route.route_long_name,
+				tripEndTime: path.tripEnd,
+				walkTimes: {
+					walkingTimeToStartStop: path.walkingTimeToStartStop,
+					walkingTimeFromEndStop: path.walkingTimeFromEndStop
 				}
-			],
-			busLocation:
-				(Date.now() -
-					Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now()) -
-					earliestTripStart) /
-				(latestTripEnd - earliestTripStart),
-			busName: path.route.route_long_name,
-			tripEndTime: path.tripEnd,
-			walkTimes: {
-				walkingTimeToStartStop: path.walkingTimeToStartStop,
-				walkingTimeFromEndStop: path.walkingTimeFromEndStop
+			}));
+			if (displayedResults.length) {
+				// copy displayedResults and replace only the busLocations
+				const displayedResultsClone = JSON.parse(JSON.stringify(displayedResults));
+				for (let i = 0; i < displayedResults.length; i++) {
+					displayedResultsClone[i].busLocation = updatedDisplayedResults[i].busLocation;
+				}
+				displayedResults = displayedResultsClone;
+			} else {
+				displayedResults = updatedDisplayedResults;
 			}
-		}));
+			loading = false;
+		};
+		refreshInterval = setInterval(callback, 5000) as unknown as number;
+		callback();
 	};
 </script>
 
@@ -143,7 +167,13 @@
 			</div>
 			<div class="line" />
 			{#if displayedResults.length == 0}
-				<div style="margin-top: 10px; font-size: 0.9rem;">No Shuttles Found</div>
+				<div style="margin-top: 10px; font-size: 0.9rem;">
+					{#if loading}
+						Loading...
+					{:else}
+						No Shuttles Found
+					{/if}
+				</div>
 			{/if}
 			{#each displayedResults as entry}
 				<RouteEntry {...entry} />

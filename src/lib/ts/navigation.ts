@@ -272,11 +272,8 @@ export const augmentRealtimeUncertainty = async (item: Path): Promise<PathWithRe
 }
 
 export const getPaths = async (
-  origin: GPS,
-  destination: GPS,
-  currentTime: number
+  paths: Path[],
 ): Promise<PathWithRealtimeUncertainty[]> => {
-  const paths = findPaths(origin, destination, currentTime);
   const augmentedPaths = await Promise.all(paths.map(augmentRealtimeUncertainty));
   return augmentedPaths;
 }

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { TickWithPosition } from '$lib/ts/types';
-	import Ripple from '@smui/ripple';
 	import busImg from '../assets/bus.svg';
 	import { formatDate } from '$lib/ts/utils';
 
