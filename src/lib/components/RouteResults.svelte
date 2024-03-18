@@ -68,17 +68,23 @@
 				// 	path.uncertainty.departureLowEnd, // - 30 * 60 * 1000,
 				// 	Date.now() - Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now())
 				// ),
-				path.uncertainty.departureLowEnd,
+				path.uncertainty.departureLowEnd - path.walkingTimeToStartStop * 60 * 1000,
 				earliestTripStart
 			);
 			latestTripEnd = Math.max(
 				// path.tripEndTime,
-				path.uncertainty.arrivalHighEnd,
+				path.uncertainty.arrivalHighEnd + path.walkingTimeFromEndStop * 60 * 1000,
 				latestTripEnd
 			);
 		});
 		displayedResults = paths.map((path) => ({
 			ticks: [
+				{
+					position: (path.uncertainty.departureLowEnd - earliestTripStart - path.walkingTimeToStartStop * 60 * 1000) /
+						(latestTripEnd - earliestTripStart),
+					...path.start.stopInfo,
+					uncertainty: path.uncertainty
+				},
 				{
 					...path.start.stopInfo,
 					position:
@@ -90,6 +96,13 @@
 					...path.end.stopInfo,
 					position:
 						(path.uncertainty.arrivalHighEnd - earliestTripStart) /
+						(latestTripEnd - earliestTripStart),
+					uncertainty: path.uncertainty,
+				},
+				{
+					...path.end.stopInfo,
+					position:
+						(path.uncertainty.arrivalHighEnd + path.walkingTimeFromEndStop * 60 * 1000 - earliestTripStart) /
 						(latestTripEnd - earliestTripStart),
 					uncertainty: path.uncertainty,
 				}

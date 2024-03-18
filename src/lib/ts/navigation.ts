@@ -197,7 +197,7 @@ export const findPaths = (
     // }
   }
   return bestPaths.filter(item => {
-    return item.tripEndTime > currentTime && item.tripEndTime < currentTime + 1.5 * 60 * 60 * 1000;
+    return item.tripEndTime > currentTime && item.tripEndTime < currentTime + 1.5 * 60 * 60 * 1000 && item.totalWalkingTime < 15;
   });
 };
 
