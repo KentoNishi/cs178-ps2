@@ -171,7 +171,7 @@
 		position: relative;
 		width: 100%;
 		height: var(--route-size);
-		/* background-color: var(--passio-green); */
+		background-color: black;
 		border-radius: 10px;
 	}
 

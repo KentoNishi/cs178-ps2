@@ -143,7 +143,7 @@
 		top: 5%;
 		height: 90%;
 		width: 5px;
-		/* background-color: var(--passio-green); */
+		background-color: black;
 		transform: translateX(-50%);
 		border-radius: 2.5px;
 	}
