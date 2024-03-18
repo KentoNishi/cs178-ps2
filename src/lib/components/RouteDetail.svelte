@@ -6,7 +6,6 @@
 	export let ticks: TickWithPosition[];
 	export let busLocation = 0;
 	export let busName = '';
-	export let isShow = false;
 
 	const formatDate = (date: number) => {
 		const d = new Date(date);
@@ -194,6 +193,5 @@
 		border-right: 10px solid transparent;
 		border-left: 10px solid transparent;
 		position: absolute;
-		transform: translateX(-5%);
 	}
 </style>

@@ -14,6 +14,19 @@
 	let modifiedDestination = false;
 	let validOrigin = false;
 	let validDestination = false;
+
+	const getCurrentLocation = () =>
+		new Promise<GPS>((resolve, reject) => {
+			navigator.geolocation.getCurrentPosition(
+				(position) => {
+					resolve({ lat: position.coords.latitude, lon: position.coords.longitude });
+				},
+				() => {
+					reject('Unable to retrieve your location');
+				}
+			);
+		});
+
 	// https://nominatim.openstreetmap.org/search?format=json&q=
 	const getLocation = async (locationName: string) => {
 		const response = await fetch(
@@ -44,15 +57,26 @@
 			const input = destinationInput.querySelector('input');
 			if (input) input.focus();
 		});
-	const searchDestination = () =>
+
+	const searchDestination = async () => {
+		if (!originLocationName && !modifiedOrigin) {
+			// If no input and not modified, use current location
+			try {
+				originLocation = await getCurrentLocation();
+				validOrigin = true;
+			} catch (error) {
+				console.error(error);
+			}
+		}
 		getLocation(destinationLocationName).then((location) => {
 			destinationLocation = { lat: location.lat, lon: location.lon };
 			destinationLocationName = location.name;
 			modifiedDestination = false;
 			validDestination = true;
 		});
+	};
 	const dispatch = createEventDispatcher();
-	$: if (validOrigin && validOrigin && validDestination) {
+	$: if (validOrigin && validDestination) {
 		dispatch('search', { originLocation, destinationLocation });
 	}
 	let originInput: HTMLElement;
@@ -61,7 +85,7 @@
 	$: if (originInput) {
 		setTimeout(() => {
 			const input = originInput.querySelector('input');
-			if (input) input.placeholder = 'Origin';
+			if (input) input.placeholder = 'Origin (default: Current Location)';
 		}, 0);
 	}
 	$: if (destinationInput) {
