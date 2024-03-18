@@ -154,7 +154,7 @@
 		position: relative;
 		width: 100%;
 		height: var(--route-size);
-		background-color: var(--passio-green);
+		/* background-color: var(--passio-green); */
 		border-radius: 10px;
 	}
 
@@ -199,6 +199,7 @@
 		transform: translateY(20px);
 		color: rgb(212, 212, 212);
 		z-index: 1000;
+		white-space: nowrap;
 	}
 
 	.bus-icon {

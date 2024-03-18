@@ -73,7 +73,7 @@
 			);
 			latestTripEnd = Math.max(
 				// path.tripEndTime,
-				Math.min(path.uncertainty.arrivalHighEnd, Date.now() + 20 * 60 * 1000),
+				path.uncertainty.arrivalHighEnd,
 				latestTripEnd
 			);
 		});
@@ -82,14 +82,14 @@
 				{
 					...path.start.stopInfo,
 					position:
-						(path.uncertainty.departureLowEnd - path.uncertainty.departureLowEnd) /
+						(path.uncertainty.departureLowEnd - earliestTripStart) /
 						(latestTripEnd - earliestTripStart),
 					uncertainty: path.uncertainty,
 				},
 				{
 					...path.end.stopInfo,
 					position:
-						(path.uncertainty.arrivalHighEnd - path.uncertainty.departureLowEnd) /
+						(path.uncertainty.arrivalHighEnd - earliestTripStart) /
 						(latestTripEnd - earliestTripStart),
 					uncertainty: path.uncertainty,
 				}

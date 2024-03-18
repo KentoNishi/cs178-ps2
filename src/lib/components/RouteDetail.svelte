@@ -136,7 +136,7 @@
 		top: 5%;
 		height: 90%;
 		width: 5px;
-		background-color: var(--passio-green);
+		/* background-color: var(--passio-green); */
 		transform: translateX(-50%);
 		border-radius: 2.5px;
 	}
@@ -181,6 +181,7 @@
 		white-space: nowrap;
 		color: rgb(212, 212, 212);
 		transform: translateY(calc(0.7rem + 5px));
+		white-space: nowrap;
 	}
 
 	.stop-label {
