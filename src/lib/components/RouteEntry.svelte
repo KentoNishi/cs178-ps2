@@ -79,7 +79,7 @@
 				class="green-bar bar left-round"
 				style="
 					left: calc(5% + {90 * ticks[0].position}%);
-					width: calc({90 * (ticks[ticks.length - 1].position - ticks[0].position)}%);
+					width: calc({90 * (ticks[1].position - ticks[0].position)}%);
 				"
 			/>
 			{#each ticks as tick, index}
@@ -95,7 +95,7 @@
 				class="orange-bar bar"
 				style="
 			left: calc(5% + {90 * ticks[1].position}%);
-			width: calc({90 * (ticks[ticks.length - 2].position - ticks[1].position)}%);
+			width: calc({90 * (ticks[2].position - ticks[1].position)}%);
 		"
 			>
 				<div class="right-arrow" />
@@ -103,7 +103,7 @@
 			<div
 				class="green-bar bar right-round"
 				style="
-					left: calc(5% + {90 * ticks[ticks.length - 1].position}%);
+					left: calc(5% + {90 * ticks[ticks.length - 2].position}%);
 					width: calc({90 * (ticks[ticks.length - 1].position - ticks[ticks.length - 2].position)}%);
 				"
 			/>

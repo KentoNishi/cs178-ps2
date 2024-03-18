@@ -89,7 +89,7 @@
 			class="bar orange-bar"
 			style="
             top: calc(5% + {90 * ticks[1].position}%);
-            height: calc({90 * (ticks[ticks.length - 2].position - ticks[1].position)}%);
+            height: calc({90 * (ticks[2].position - ticks[1].position)}%);
         "
 		>
 			<div class="down-arrow" />
