@@ -2,28 +2,17 @@
 	import type { TickWithPosition } from '$lib/ts/types';
 	import Ripple from '@smui/ripple';
 	import busImg from '../assets/bus.svg';
+	import { formatDate } from '$lib/ts/utils';
 
 	export let ticks: TickWithPosition[];
 	export let busLocation = 0;
 	export let busName = '';
-	export let totalTime = 0;
+	export let tripEndTime;
 	// export let walkTime = 0;
 	export let walkTimes: {
 		walkingTimeToStartStop: number;
 		walkingTimeFromEndStop: number;
 	} = { walkingTimeToStartStop: 0, walkingTimeFromEndStop: 0 };
-	const formatDate = (date: number) => {
-		const d = new Date(date);
-		// hour:minute, 12 hour, no zeros, no am/pm, no seconds
-		return d
-			.toLocaleTimeString('en-US', {
-				hour: 'numeric',
-				minute: 'numeric',
-				hour12: true,
-				hourCycle: 'h23'
-			})
-			.slice(0, -3);
-	};
 
 	const getEstimate = (tick: TickWithPosition, index: number) => {
 		if (index == 0) {
@@ -50,6 +39,8 @@
 		if (depLowMinutes != depHighMinutes) return `in ${depLowMinutes}–${depHighMinutes} minutes`;
 		return `in ${depHighMinutes} minutes`;
 	};
+
+	const time = formatDate(tripEndTime);
 </script>
 
 <div class="full-screen">
@@ -63,7 +54,7 @@
 			<br />
 			From stop: {walkTimes.walkingTimeFromEndStop.toFixed(2)} min.
 		</div>
-		<div class="total-time">Total Duration: {totalTime.toFixed(2)} min</div>
+		<div class="total-time">ETA: {time}</div>
 		<!-- Vertical Route Line -->
 		<div class="route"></div>
 		{#each ticks as tick, index}

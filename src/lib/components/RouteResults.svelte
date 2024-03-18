@@ -84,14 +84,14 @@
 					position:
 						(path.uncertainty.departureLowEnd - earliestTripStart) /
 						(latestTripEnd - earliestTripStart),
-					uncertainty: path.uncertainty,
+					uncertainty: path.uncertainty
 				},
 				{
 					...path.end.stopInfo,
 					position:
 						(path.uncertainty.arrivalHighEnd - earliestTripStart) /
 						(latestTripEnd - earliestTripStart),
-					uncertainty: path.uncertainty,
+					uncertainty: path.uncertainty
 				}
 			],
 			busLocation:
@@ -100,7 +100,7 @@
 					earliestTripStart) /
 				(latestTripEnd - earliestTripStart),
 			busName: path.route.route_long_name,
-			totalTime: path.tripDuration,
+			tripEndTime: path.tripEnd,
 			walkTimes: {
 				walkingTimeToStartStop: path.walkingTimeToStartStop,
 				walkingTimeFromEndStop: path.walkingTimeFromEndStop

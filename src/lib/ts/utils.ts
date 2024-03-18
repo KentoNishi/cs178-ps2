@@ -30,3 +30,15 @@ export const getDateObject = (timeString: string): Date => {
   return date;
 };
 
+export const formatDate = (date: number) => {
+  const d = new Date(date);
+  // hour:minute, 12 hour, no zeros, no am/pm, no seconds
+  return d
+    .toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+      hourCycle: 'h23'
+    })
+    .slice(0, -3);
+};

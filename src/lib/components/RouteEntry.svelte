@@ -3,30 +3,18 @@
 	import Ripple from '@smui/ripple';
 	import busImg from '../assets/bus.svg';
 	import RouteDetail from './RouteDetail.svelte';
+	import { formatDate } from '$lib/ts/utils';
 
 	export let ticks: TickWithPosition[];
 	export let busLocation = 0;
 	export let busName = '';
-	export let totalTime = 0;
+	export let tripEndTime = 0;
 	export let walkTimes: {
 		walkingTimeToStartStop: number;
 		walkingTimeFromEndStop: number;
 	} = { walkingTimeToStartStop: 0, walkingTimeFromEndStop: 0 };
 
 	let isShow = false;
-
-	const formatDate = (date: number) => {
-		const d = new Date(date);
-		// hour:minute, 12 hour, no zeros, no am/pm, no seconds
-		return d
-			.toLocaleTimeString('en-US', {
-				hour: 'numeric',
-				minute: 'numeric',
-				hour12: true,
-				hourCycle: 'h23'
-			})
-			.slice(0, -3);
-	};
 
 	const getEstimate = (tick: TickWithPosition, index: number) => {
 		if (index == 0) {
@@ -68,7 +56,7 @@
 	on:click={toggleFullscreen}
 >
 	{#if isShow}
-		<RouteDetail {ticks} {busLocation} {busName} {totalTime} {walkTimes} />
+		<RouteDetail {ticks} {busLocation} {busName} {tripEndTime} {walkTimes} />
 	{:else}
 		<div class="container">
 			<div class="bus-name">{busName}</div>

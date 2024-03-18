@@ -20,6 +20,7 @@ interface Path {
   busDestinationArrivalTime: number;
   tripStartTime: number;
   tripEndTime: number;
+  tripEnd: Date;
   tripDuration: number;
   walkingTimeToStartStop: number;
   walkingTimeFromEndStop: number;
@@ -157,6 +158,7 @@ export const findPaths = (
     const walkingTimeFromEndStop = distanceFromEndStop / WALKING_SPEED * 60;
     const tripStartTime = new Date(adjustTime(startStopTime.departure_time, currentDateWithWalk) - walkingTimeToStartStop * 60 * 1000).getTime();
     const tripEndTime = new Date(adjustTime(endStopTime.arrival_time, departureDate) + walkingTimeFromEndStop * 60 * 1000).getTime();
+    const tripEnd = new Date(adjustTime(endStopTime.arrival_time, departureDate) + walkingTimeFromEndStop * 60 * 1000);
     const busOriginDepartureTime = adjustTime(startStopTime.departure_time, currentDate);
     const busDestinationArrivalTime = adjustTime(endStopTime.arrival_time, departureDate);
     if (distanceToStartStop + distanceFromEndStop > distanceToDestination) continue;
@@ -168,6 +170,7 @@ export const findPaths = (
       busDestinationArrivalTime,
       tripStartTime,
       tripEndTime,
+      tripEnd,
       walkingTimeToStartStop,
       walkingTimeFromEndStop,
       tripDuration: (tripEndTime - tripStartTime) / 1000 / 60,
