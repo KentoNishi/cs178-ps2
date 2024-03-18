@@ -107,7 +107,9 @@ export const findPaths = (
   //     route.routeStops.forEach(endStop => {
   const distanceToDestination = getDistance(origin.lat, origin.lon, destination.lat, destination.lon);
   // const walkingTime = timeToWalk(origin, destination);
-  for (const route of routeInfos) {
+  for (const route of routeInfos.filter(item => {
+    return ![777, 783, 785].includes(item.route_id)
+  })) {
     // for (const startStopKey of Object.keys(route.routeStops)) {
     let startStopKey = -1;
     // pick the closest stop to the origin
