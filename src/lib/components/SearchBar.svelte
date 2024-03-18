@@ -59,7 +59,7 @@
 		});
 
 	const searchDestination = async () => {
-		if (!originLocationName && !modifiedOrigin) {
+		if (!originLocationName) {
 			// If no input and not modified, use current location
 			try {
 				originLocation = await getCurrentLocation();

@@ -7,8 +7,11 @@
 	export let busLocation = 0;
 	export let busName = '';
 	export let totalTime = 0;
-	export let walkTime = 0;
-
+	// export let walkTime = 0;
+	export let walkTimes: {
+		walkingTimeToStartStop: number;
+		walkingTimeFromEndStop: number;
+	} = { walkingTimeToStartStop: 0, walkingTimeFromEndStop: 0 };
 	const formatDate = (date: number) => {
 		const d = new Date(date);
 		// hour:minute, 12 hour, no zeros, no am/pm, no seconds
@@ -53,8 +56,13 @@
 	<div class="container">
 		<div class="bus-name">{busName}</div>
 		<div class="bus-desc">{getETA(ticks[0].uncertainty)}</div>
-		<div class="trip-details">Trip Details</div>
-		<div class="walk-time">Walking Time: {walkTime.toFixed(2)} min</div>
+		<div class="trip-details">Walking Time</div>
+		<!-- <div class="walk-time">Walk: {walkTime.toFixed(2)} min</div> -->
+		<div class="walk-time">
+			To stop: {walkTimes.walkingTimeToStartStop.toFixed(2)} min.
+			<br />
+			From stop: {walkTimes.walkingTimeFromEndStop.toFixed(2)} min.
+		</div>
 		<div class="total-time">Total Duration: {totalTime.toFixed(2)} min</div>
 		<!-- Vertical Route Line -->
 		<div class="route"></div>
@@ -109,7 +117,7 @@
 	.walk-time {
 		position: absolute;
 		top: 140px;
-		transform: translate(1px, calc(-46px - 10px));
+		transform: translate(12px, calc(-46px - 10px));
 		color: rgb(212, 212, 212);
 		font-size: 0.8rem;
 	}
@@ -117,7 +125,7 @@
 	.total-time {
 		position: absolute;
 		top: 160px;
-		transform: translate(1px, calc(-46px - 10px));
+		transform: translate(1px, calc(-24px - 10px));
 		color: rgb(212, 212, 212);
 		font-size: 0.8rem;
 	}

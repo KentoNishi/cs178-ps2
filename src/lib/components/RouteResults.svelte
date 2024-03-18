@@ -36,6 +36,7 @@
 		ticks: TickWithPosition[];
 		busLocation: number;
 		busName: string;
+		walkTimes: { walkingTimeToStartStop: number; walkingTimeFromEndStop: number };
 	}[] = [];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	export const navigate = async (details: any) => {
@@ -63,15 +64,16 @@
 			earliestTripStart = Math.min(
 				// path.tripStartTime - path.walkingTimeToStartStop,
 				// path.tripStartTime,
-				Math.max(
-					path.uncertainty.departureLowEnd - 30 * 60 * 1000,
-					Date.now() - Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now())
-				),
+				// Math.max(
+				// 	path.uncertainty.departureLowEnd, // - 30 * 60 * 1000,
+				// 	Date.now() - Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now())
+				// ),
+				path.uncertainty.departureLowEnd,
 				earliestTripStart
 			);
 			latestTripEnd = Math.max(
 				// path.tripEndTime,
-				Math.min(path.busDestinationArrivalTime, Date.now() + 30 * 60 * 1000),
+				Math.min(path.uncertainty.arrivalHighEnd, Date.now() + 20 * 60 * 1000),
 				latestTripEnd
 			);
 		});
@@ -80,16 +82,16 @@
 				{
 					...path.start.stopInfo,
 					position:
-						(path.uncertainty.departureLowEnd - earliestTripStart) /
+						(path.uncertainty.departureLowEnd - path.uncertainty.departureLowEnd) /
 						(latestTripEnd - earliestTripStart),
-					uncertainty: path.uncertainty
+					uncertainty: path.uncertainty,
 				},
 				{
 					...path.end.stopInfo,
 					position:
-						(path.uncertainty.arrivalHighEnd - earliestTripStart) /
+						(path.uncertainty.arrivalHighEnd - path.uncertainty.departureLowEnd) /
 						(latestTripEnd - earliestTripStart),
-					uncertainty: path.uncertainty
+					uncertainty: path.uncertainty,
 				}
 			],
 			busLocation:
@@ -99,7 +101,10 @@
 				(latestTripEnd - earliestTripStart),
 			busName: path.route.route_long_name,
 			totalTime: path.tripDuration,
-			walkTime: path.walkingTimeToStartStop + path.walkingTimeFromEndStop
+			walkTimes: {
+				walkingTimeToStartStop: path.walkingTimeToStartStop,
+				walkingTimeFromEndStop: path.walkingTimeFromEndStop
+			}
 		}));
 	};
 </script>

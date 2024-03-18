@@ -8,7 +8,10 @@
 	export let busLocation = 0;
 	export let busName = '';
 	export let totalTime = 0;
-	export let walkTime = 0;
+	export let walkTimes: {
+		walkingTimeToStartStop: number;
+		walkingTimeFromEndStop: number;
+	} = { walkingTimeToStartStop: 0, walkingTimeFromEndStop: 0 };
 
 	let isShow = false;
 
@@ -65,7 +68,7 @@
 	on:click={toggleFullscreen}
 >
 	{#if isShow}
-		<RouteDetail {ticks} {busLocation} {busName} {totalTime} {walkTime} />
+		<RouteDetail {ticks} {busLocation} {busName} {totalTime} {walkTimes} />
 	{:else}
 		<div class="container">
 			<div class="bus-name">{busName}</div>
