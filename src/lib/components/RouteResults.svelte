@@ -60,6 +60,7 @@
 		});
 		let earliestTripStart = Infinity;
 		let latestTripEnd = -Infinity;
+		let minShuttleTimeDistance = 0;
 		paths.forEach((path) => {
 			earliestTripStart = Math.min(
 				// path.tripStartTime - path.walkingTimeToStartStop,
@@ -76,7 +77,12 @@
 				path.uncertainty.arrivalHighEnd + path.walkingTimeFromEndStop * 60 * 1000,
 				latestTripEnd
 			);
+			minShuttleTimeDistance = Math.max(
+				Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now()),
+				minShuttleTimeDistance
+			);
 		});
+		earliestTripStart = Math.min(earliestTripStart, Date.now() - minShuttleTimeDistance);
 		displayedResults = paths.map((path) => ({
 			ticks: [
 				{
