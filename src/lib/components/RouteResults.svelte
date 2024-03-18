@@ -97,7 +97,9 @@
 					Math.max(0, path.realtime.expectedArrivalAtStartStop - Date.now()) -
 					earliestTripStart) /
 				(latestTripEnd - earliestTripStart),
-			busName: path.route.route_long_name
+			busName: path.route.route_long_name,
+			totalTime: path.tripDuration,
+			walkTime: path.walkingTimeToStartStop + path.walkingTimeFromEndStop
 		}));
 	};
 </script>

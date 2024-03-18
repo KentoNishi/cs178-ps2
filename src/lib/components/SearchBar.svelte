@@ -164,7 +164,7 @@
 	}
 	:global(.text-input-location) {
 		height: 40px;
-		background-color: white;
+		background-color: rgb(50, 50, 50);
 		border-radius: 4px;
 		width: 100%;
 	}

@@ -7,6 +7,8 @@
 	export let ticks: TickWithPosition[];
 	export let busLocation = 0;
 	export let busName = '';
+	export let totalTime = 0;
+	export let walkTime = 0;
 
 	let isShow = false;
 
@@ -63,7 +65,7 @@
 	on:click={toggleFullscreen}
 >
 	{#if isShow}
-		<RouteDetail {ticks} {busLocation} {busName} />
+		<RouteDetail {ticks} {busLocation} {busName} {totalTime} {walkTime} />
 	{:else}
 		<div class="container">
 			<div class="bus-name">{busName}</div>
@@ -192,7 +194,6 @@
 		position: absolute;
 		font-size: 0.7rem;
 		transform: translateY(20px);
-		white-space: nowrap;
 		color: rgb(212, 212, 212);
 		z-index: 1000;
 	}
