@@ -46,6 +46,7 @@
 	<div class="container">
 		<div class="bus-name">{busName}</div>
 		<div class="bus-desc">{getETA(ticks[1].uncertainty)}</div>
+		<div class="dropdown">-</div>
 		<div class="trip-details">Walking Time</div>
 		<!-- <div class="walk-time">Walk: {walkTime.toFixed(2)} min</div> -->
 		<div class="walk-time">
@@ -53,7 +54,7 @@
 			<br />
 			From stop: {walkTimes.walkingTimeFromEndStop.toFixed(2)} min.
 		</div>
-		<div class="total-time">ETA: {time}</div>
+		<div class="eta">ETA: {time}</div>
 		<!-- Vertical Route Line -->
 		<div class="route"></div>
 		<div
@@ -112,6 +113,14 @@
 		font-size: 0.8rem;
 	}
 
+	.dropdown {
+		position: absolute;
+		right: 10px;
+		top: -5px;
+		color: rgb(212, 212, 212);
+		font-size: 2.5rem;
+	}
+
 	.trip-details {
 		position: absolute;
 		top: 120px;
@@ -128,7 +137,7 @@
 		font-size: 0.8rem;
 	}
 
-	.total-time {
+	.eta {
 		position: absolute;
 		top: 160px;
 		transform: translate(1px, calc(-24px - 10px));

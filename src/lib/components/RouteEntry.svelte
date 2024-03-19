@@ -45,6 +45,8 @@
 	function toggleFullscreen() {
 		isShow = !isShow;
 	}
+
+	const time = formatDate(tripEndTime);
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -61,6 +63,8 @@
 		<div class="container">
 			<div class="bus-name">{busName}</div>
 			<div class="bus-desc">{getETA(ticks[1].uncertainty)}</div>
+			<div class="eta">ETA: {time}</div>
+			<div class="dropdown">+</div>
 			<!-- Horizontal Route Line -->
 			<div class="route"></div>
 			<div
@@ -165,6 +169,22 @@
 		color: rgb(212, 212, 212);
 		/* font-style: italic; */
 		font-size: 0.8rem;
+	}
+
+	.eta {
+		position: absolute;
+		right: 35px;
+		top: -75px;
+		color: rgb(212, 212, 212);
+		font-size: 0.8rem;
+	}
+
+	.dropdown {
+		position: absolute;
+		right: -10px;
+		top: -82px;
+		color: rgb(212, 212, 212);
+		font-size: 1.5rem;
 	}
 
 	.route {

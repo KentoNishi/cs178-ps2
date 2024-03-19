@@ -29,7 +29,7 @@
 		// 	lon: -71.12602311114634
 		// };
 		const date = new Date(); // new Date('Wed Mar 13 2024 9:00:00 GMT-0400 (Eastern Daylight Time)');
-		console.log('Navigating from', start, '(Mather) to', end, '(SEC) at', date);
+		console.log('Navigating from', start, 'to', end, 'at', date);
 		const foundPaths = await findPaths(start, end, date.getTime());
 		walkOption = {
 			walkingTime: timeToWalk(start, end),
