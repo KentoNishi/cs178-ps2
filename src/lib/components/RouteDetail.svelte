@@ -1,18 +1,18 @@
 <script lang="ts">
 	import type { TickWithPosition } from '$lib/ts/types';
 	import busImg from '../assets/bus.svg';
-	import { formatDate, getETA, getEstimate } from '$lib/ts/utils';
+	import { getETA, getETABounds, getEstimate } from '$lib/ts/utils';
 
 	export let ticks: TickWithPosition[];
 	export let busLocation = 0;
 	export let busName = '';
-	export let tripEndTime;
-	// export let walkTime = 0;
+	export let tripDuration = 0;
 	export let walkTimes: {
 		walkingTimeToStartStop: number;
 		walkingTimeFromEndStop: number;
 	} = { walkingTimeToStartStop: 0, walkingTimeFromEndStop: 0 };
-	const time = formatDate(tripEndTime);
+
+	const etaBounds = getETABounds(ticks, walkTimes.walkingTimeFromEndStop);
 </script>
 
 <div class="full-screen">
@@ -20,14 +20,21 @@
 		<div class="bus-name">{busName}</div>
 		<div class="bus-desc">{getETA(ticks[1].uncertainty)}</div>
 		<div class="dropdown">-</div>
-		<div class="trip-details">Walking Time</div>
-		<!-- <div class="walk-time">Walk: {walkTime.toFixed(2)} min</div> -->
-		<div class="walk-time">
-			To boarding stop: {Math.round(walkTimes.walkingTimeToStartStop)} min.
+		<div class="trip-details">
+			<div style="color: var(--passio-green);">Walking Time</div>
+			<div class="walk-time">
+				To boarding stop: {Math.round(walkTimes.walkingTimeToStartStop)} min.
+				<br />
+				After disembarking: {Math.round(walkTimes.walkingTimeFromEndStop)} min.
+			</div>
 			<br />
-			After disembarking: {Math.round(walkTimes.walkingTimeFromEndStop)} min.
+			<div style="color: #ff3e00;">Riding Time</div>
+			<div class="ride-time">
+				{Math.round(tripDuration)} min.
+			</div>
+			<br />
+			<div class="eta">ETA: {etaBounds.timeLowerBound}–{etaBounds.timeHigherBound}</div>
 		</div>
-		<div class="eta">ETA: {time}</div>
 		<!-- Vertical Route Line -->
 		<div class="route"></div>
 		<div
@@ -75,13 +82,13 @@
 	.bus-name {
 		position: absolute;
 		font-size: 1rem;
-		transform: translate(0px, calc(-70px - 10px));
+		transform: translate(0px, -60px);
 		color: white;
 	}
 
 	.bus-desc {
 		position: absolute;
-		transform: translate(1px, calc(-46px - 10px));
+		transform: translate(1px, -40px);
 		color: rgb(212, 212, 212);
 		font-size: 0.8rem;
 	}
@@ -96,26 +103,25 @@
 
 	.trip-details {
 		position: absolute;
-		top: 120px;
+		top: 140px;
 		transform: translate(1px, calc(-46px - 10px));
 		color: rgb(212, 212, 212);
 		font-size: 1rem;
 	}
 
 	.walk-time {
-		position: absolute;
-		top: 140px;
-		transform: translate(10px, calc(-46px - 10px));
+		color: rgb(212, 212, 212);
+		font-size: 0.8rem;
+	}
+
+	.ride-time {
 		color: rgb(212, 212, 212);
 		font-size: 0.8rem;
 	}
 
 	.eta {
-		position: absolute;
-		top: 160px;
-		transform: translate(1px, calc(-24px - 10px));
 		color: rgb(212, 212, 212);
-		font-size: 0.8rem;
+		font-size: 1rem;
 	}
 
 	.route {

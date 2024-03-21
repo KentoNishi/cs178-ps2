@@ -70,3 +70,12 @@ export const getETA = (uncertainty: TickWithPosition['uncertainty']) => {
   return `Departs in ${depHighMinutes} minutes`;
 };
 
+export const getETABounds = (ticks: TickWithPosition[], walkingTimeFromEndStop: number) => {
+  const timeLowerBound = formatDate(
+		ticks[2].uncertainty.arrivalLowEnd +walkingTimeFromEndStop * 60 * 1000
+	);
+	const timeHigherBound = formatDate(
+		ticks[3].uncertainty.arrivalHighEnd + walkingTimeFromEndStop * 60 * 1000
+	);
+  return { timeLowerBound, timeHigherBound };
+}

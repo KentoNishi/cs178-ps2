@@ -135,7 +135,7 @@
 						earliestTripStart) /
 					(latestTripEnd - earliestTripStart),
 				busName: path.route.route_long_name,
-				tripEndTime: path.tripEnd,
+				tripDuration: path.tripDuration,
 				walkTimes: {
 					walkingTimeToStartStop: path.walkingTimeToStartStop,
 					walkingTimeFromEndStop: path.walkingTimeFromEndStop
