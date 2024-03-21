@@ -50,9 +50,9 @@
 		<div class="trip-details">Walking Time</div>
 		<!-- <div class="walk-time">Walk: {walkTime.toFixed(2)} min</div> -->
 		<div class="walk-time">
-			To stop: {walkTimes.walkingTimeToStartStop.toFixed(2)} min.
+			To boarding stop: {Math.round(walkTimes.walkingTimeToStartStop)} min.
 			<br />
-			From stop: {walkTimes.walkingTimeFromEndStop.toFixed(2)} min.
+			After disembarking: {Math.round(walkTimes.walkingTimeFromEndStop)} min.
 		</div>
 		<div class="eta">ETA: {time}</div>
 		<!-- Vertical Route Line -->
@@ -132,7 +132,7 @@
 	.walk-time {
 		position: absolute;
 		top: 140px;
-		transform: translate(12px, calc(-46px - 10px));
+		transform: translate(10px, calc(-46px - 10px));
 		color: rgb(212, 212, 212);
 		font-size: 0.8rem;
 	}
