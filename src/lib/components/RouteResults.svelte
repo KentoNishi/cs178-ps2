@@ -162,7 +162,7 @@
 	<div class="container">
 		{#if walkOption}
 			<div class="walk-time">
-				{Math.round(walkOption.walkingTime)} min. walk ({Math.round(walkOption.distance * 100) /
+				{Math.round(walkOption.walkingTime)} min. by foot ({Math.round(walkOption.distance * 100) /
 					100}mi)
 			</div>
 			<div class="line" />
@@ -205,8 +205,9 @@
 	}
 	.walk-time {
 		margin-bottom: 10px;
-		background-color: #4a4a4a;
+		background-color: #000000;
 		padding: 5px 7.5px 5px 7.5px;
+		color: var(--passio-green);
 		border-radius: 200px;
 		font-size: 0.8rem;
 	}

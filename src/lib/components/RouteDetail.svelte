@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { TickWithPosition } from '$lib/ts/types';
 	import busImg from '../assets/bus.svg';
-	import { formatDate } from '$lib/ts/utils';
+	import { formatDate, getETA, getEstimate } from '$lib/ts/utils';
 
 	export let ticks: TickWithPosition[];
 	export let busLocation = 0;
@@ -12,33 +12,6 @@
 		walkingTimeToStartStop: number;
 		walkingTimeFromEndStop: number;
 	} = { walkingTimeToStartStop: 0, walkingTimeFromEndStop: 0 };
-
-	const getEstimate = (tick: TickWithPosition, index: number) => {
-		if (index == 0) {
-			const f1 = formatDate(tick.uncertainty.departureLowEnd);
-			const f2 = formatDate(tick.uncertainty.departureHighEnd);
-			if (f1 == f2) return f1;
-			return `${f1}–${f2}`;
-		}
-		const f1 = formatDate(tick.uncertainty.arrivalLowEnd);
-		const f2 = formatDate(tick.uncertainty.arrivalHighEnd);
-		if (f1 == f2) return f1;
-		return `${f1}–${f2}`;
-	};
-
-	const getETA = (uncertainty: TickWithPosition['uncertainty']) => {
-		// "in X-XX minutes"
-		const depLow = new Date(uncertainty.departureLowEnd);
-		const depHigh = new Date(uncertainty.departureHighEnd);
-		const now = new Date();
-		const depLowDiff = Math.max(0, depLow.getTime() - now.getTime());
-		const depHighDiff = Math.max(0, depHigh.getTime() - now.getTime());
-		const depLowMinutes = Math.floor(depLowDiff / 60000);
-		const depHighMinutes = Math.floor(depHighDiff / 60000);
-		if (depLowMinutes != depHighMinutes) return `in ${depLowMinutes}–${depHighMinutes} minutes`;
-		return `in ${depHighMinutes} minutes`;
-	};
-
 	const time = formatDate(tripEndTime);
 </script>
 

@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import csvToJson from 'convert-csv-to-json';
+import type { TickWithPosition } from './types';
 
 export const convertCsvToObject = (csv: string, key: string) => {
   const arr = convertCsvToArray(csv);
@@ -42,3 +43,30 @@ export const formatDate = (date: number) => {
     })
     .slice(0, -3);
 };
+
+export const getEstimate = (tick: TickWithPosition, index: number) => {
+  if (index == 1) {
+    const f1 = formatDate(tick.uncertainty.departureLowEnd);
+    const f2 = formatDate(tick.uncertainty.departureHighEnd);
+    if (f1 == f2) return f1;
+    return `${f1}–${f2}`;
+  }
+  const f1 = formatDate(tick.uncertainty.arrivalLowEnd);
+  const f2 = formatDate(tick.uncertainty.arrivalHighEnd);
+  if (f1 == f2) return f1;
+  return `${f1}–${f2}`;
+};
+
+export const getETA = (uncertainty: TickWithPosition['uncertainty']) => {
+  // "in X-XX minutes"
+  const depLow = new Date(uncertainty.departureLowEnd);
+  const depHigh = new Date(uncertainty.departureHighEnd);
+  const now = new Date();
+  const depLowDiff = Math.max(0, depLow.getTime() - now.getTime());
+  const depHighDiff = Math.max(0, depHigh.getTime() - now.getTime());
+  const depLowMinutes = Math.floor(depLowDiff / 60000);
+  const depHighMinutes = Math.floor(depHighDiff / 60000);
+  if (depLowMinutes != depHighMinutes) return `Departs in ${depLowMinutes}–${depHighMinutes} minutes`;
+  return `Departs in ${depHighMinutes} minutes`;
+};
+
