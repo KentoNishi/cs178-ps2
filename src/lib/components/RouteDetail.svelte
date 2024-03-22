@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { TickWithPosition } from '$lib/ts/types';
 	import busImg from '../assets/bus.svg';
-	import { getETA, getETABounds, getEstimate } from '$lib/ts/utils';
+	import { createRange, getETA, getETABounds, getEstimate } from '$lib/ts/utils';
 
 	export let ticks: TickWithPosition[];
 	export let busLocation = 0;
@@ -33,7 +33,7 @@
 				{Math.round(tripDuration)} min.
 			</div>
 			<br />
-			<div class="eta">ETA: {etaBounds.timeLowerBound}–{etaBounds.timeHigherBound}</div>
+			<div class="eta">ETA: {createRange(etaBounds)}</div>
 		</div>
 		<!-- Vertical Route Line -->
 		<div class="route"></div>

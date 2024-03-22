@@ -79,3 +79,8 @@ export const getETABounds = (ticks: TickWithPosition[], walkingTimeFromEndStop: 
 	);
   return { timeLowerBound, timeHigherBound };
 }
+
+export const createRange = (etaBounds: { timeLowerBound: string; timeHigherBound: string }) => {
+  if (etaBounds.timeLowerBound == etaBounds.timeHigherBound) return etaBounds.timeLowerBound;
+  return `${etaBounds.timeLowerBound}–${etaBounds.timeHigherBound}`;
+}

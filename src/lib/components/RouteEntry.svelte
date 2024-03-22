@@ -3,7 +3,7 @@
 	import Ripple from '@smui/ripple';
 	import busImg from '../assets/bus.svg';
 	import RouteDetail from './RouteDetail.svelte';
-	import { getETA, getETABounds, getEstimate } from '$lib/ts/utils';
+	import { createRange, getETA, getETABounds, getEstimate } from '$lib/ts/utils';
 
 	export let ticks: TickWithPosition[];
 	export let busLocation = 0;
@@ -37,7 +37,7 @@
 		<div class="container">
 			<div class="bus-name">{busName}</div>
 			<div class="bus-desc">{getETA(ticks[1].uncertainty)}</div>
-			<div class="eta">ETA: {etaBounds.timeLowerBound}–{etaBounds.timeHigherBound}</div>
+			<div class="eta">ETA: {createRange(etaBounds)}</div>
 			<div class="dropdown">+</div>
 			<!-- Horizontal Route Line -->
 			<div class="route"></div>
